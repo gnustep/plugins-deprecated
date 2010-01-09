@@ -1,0 +1,8 @@
+2010-01-09 Hans Baier <hansfbaier@googlemail.com>
+
+	* Initial import; thus dicontinuing my git repository on
+	http://github.com/hansfbaier/gnustep-gnome
+	note that as of now the theme crashes when activated with
+	SystemPreferences.app, but it works when activated with defaults
+	Note also, this isn't perfect yet and still has a lot of rough
+	edges (eg. the Makefile), contributions welcome ;)

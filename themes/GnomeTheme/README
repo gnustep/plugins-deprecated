@@ -1,0 +1,20 @@
+========
+Gnome Theme
+========
+
+Gnome is a theme engine for GNUstep which 
+uses the current Gtk+-Theme selected in Gnome
+for drawing its widgets.
+
+Note, that this currently crashes when used 
+with SystemPreferences.app,
+but it works when activated like this:
+
+defaults write NSGlobalDomain GSTheme GnomeTheme
+
+Installation
+------------
+
+as usual, but if you like, then
+see the INSTALL file.
+
