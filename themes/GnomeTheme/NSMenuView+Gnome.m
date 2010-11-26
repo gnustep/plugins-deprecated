@@ -3,11 +3,17 @@
 #include "GGnomeTheme.h"
 #include "GGPainter.h"
 
-@implementation NSMenuView (Gnome)
-- (void) drawRect: (NSRect)rect
+@implementation GSTheme (NSMenuView)
+
+- (void) drawMenuRect: (NSRect)rect
+	       inView: (NSView *)view
+	 isHorizontal: (BOOL)horizontal
+	    itemCells: (NSArray *)itemCells
 {
-  int        i;
-  int        howMany = [_itemCells count];
+  int         i = 0;
+  int         howMany = [itemCells count];
+  NSMenuView *menuView = (NSMenuView *)view;
+  NSRect      bounds = [view bounds];
 
   // Draw the menu cells.
   for (i = 0; i < howMany; i++)
@@ -15,11 +21,11 @@
       NSRect aRect;
       NSMenuItemCell *aCell;
 
-      aRect = [self rectOfItemAtIndex: i];
+      aRect = [menuView rectOfItemAtIndex: i];
       if (NSIntersectsRect(rect, aRect) == YES)
         {
-          aCell = [self menuItemCellForItemAtIndex: i];
-          [aCell drawWithFrame: aRect inView: self];
+          aCell = [menuView menuItemCellForItemAtIndex: i];
+          [aCell drawWithFrame: aRect inView: menuView];
         }
     }
 
@@ -28,13 +34,13 @@
 
   NSImage *img = [painter paintBox: widget
                           withPart: "menu"
-                           andSize: _bounds
+                           andSize: bounds
                           withClip: NSZeroRect
                         usingState: GTK_STATE_NORMAL
                             shadow: GTK_SHADOW_OUT
                              style: widget->style];
 
-  [painter drawAndReleaseImage: img inFrame: _bounds flipped: NO];
+  [painter drawAndReleaseImage: img inFrame: bounds flipped: NO];
 }
 
 @end
