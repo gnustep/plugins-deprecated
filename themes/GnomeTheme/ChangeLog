@@ -1,5 +1,9 @@
 2010-11-26 Gregory Casamento <greg.casamento@gmail.com>
 
+	* NSScrollView+Gnome.m: Use new theme methods.
+
+2010-11-26 Gregory Casamento <greg.casamento@gmail.com>
+
 	* NSMenuView+Gnome.m: Use new theme methods.
 
 2010-11-26 Gregory Casamento <greg.casamento@gmail.com>

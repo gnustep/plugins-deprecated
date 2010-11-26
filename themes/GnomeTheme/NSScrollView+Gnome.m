@@ -2,16 +2,20 @@
 #include <AppKit/NSScrollView.h>
 #include <GNUstepGUI/GSTheme.h>
 
-@implementation NSScrollView (Gnome)
+@implementation GSTheme (NSScrollView)
 
-- (void) drawRect: (NSRect)rect
+- (void) drawScrollViewRect: (NSRect)rect
+		     inView: (NSView *)view 
 {
+  NSScrollView  *scrollView = (NSScrollView *)view;
   NSGraphicsContext *ctxt = GSCurrentContext();
   GSTheme	*theme = [GSTheme theme];
   NSColor	*color;
   NSString	*name;
+  NSBorderType   borderType = [scrollView borderType];
+  NSRect         bounds = [view bounds];
 
-  name = [theme nameForElement: self];
+  name = [theme nameForElement: scrollView];
   if (name == nil)
     {
       name = @"NSScrollView";
@@ -22,27 +26,26 @@
       color = [NSColor controlDarkShadowColor];
     }
   
-  switch (_borderType)
+  switch (borderType)
     {
       case NSNoBorder:
         break;
 
       case NSLineBorder:
         [color set];
-        NSFrameRect(_bounds);
+        NSFrameRect(bounds);
         break;
 
       case NSBezelBorder:
-        [theme drawGrayBezel: _bounds withClip: rect];
+        [theme drawGrayBezel: bounds withClip: rect];
         break;
 
       case NSGrooveBorder:
-        [theme drawGroove: _bounds withClip: rect];
+        [theme drawGroove: bounds withClip: rect];
         break;
     }
 
   [color set];
   DPSsetlinewidth(ctxt, 1);
-
 }
 @end
