@@ -3,7 +3,7 @@
 #include <GNUstepGUI/GSTheme.h>
 #include "GGPainter.h"
 
-@implementation GSTheme (Gnome)
+@implementation GSTheme (NSTabView)
 
 // Drawing.
 - (void) drawTabViewRect: (NSRect)rect

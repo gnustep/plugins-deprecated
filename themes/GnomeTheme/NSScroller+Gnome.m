@@ -3,56 +3,73 @@
 #include <GNUstepGUI/GSTheme.h>
 #include "GGPainter.h"
 
+@interface NSScroller (Gnome)
+- (BOOL) isHorizontal;
+@end
+
 @implementation NSScroller (Gnome)
+- (BOOL) isHorizontal
+{
+  return _scFlags.isHorizontal;
+}
+@end
+
+@implementation GSTheme (NSScroller)
 
 /*
  *	draw the scroller
  */
-- (void) drawRect: (NSRect)rect
+- (void) drawScrollerRect: (NSRect)rect
+		   inView: (NSView *)view
+		  hitPart: (NSScrollerPart)hitPart
+	     isHorizontal: (BOOL) isHorizontal
 {
+  NSScroller *scroller = (NSScroller *)view;
   NSRect rectForPartIncrementLine;
   NSRect rectForPartDecrementLine;
   NSRect rectForPartKnobSlot;
+  NSRect bounds = [view bounds];
 
-  rectForPartIncrementLine = [self rectForPart: NSScrollerIncrementLine];
-  rectForPartDecrementLine = [self rectForPart: NSScrollerDecrementLine];
-  rectForPartKnobSlot = [self rectForPart: NSScrollerKnobSlot];
+  rectForPartIncrementLine = [scroller rectForPart: NSScrollerIncrementLine];
+  rectForPartDecrementLine = [scroller rectForPart: NSScrollerDecrementLine];
+  rectForPartKnobSlot = [scroller rectForPart: NSScrollerKnobSlot];
 
-  [[_window backgroundColor] set];
+  [[[view window] backgroundColor] set];
   NSRectFill (rect);
 
   ///////////////// BEGIN ADDITION
   GGPainter *painter = [GGPainter instance];
 
-  GtkWidget *widget = [GGPainter getWidget: _scFlags.isHorizontal ? @"GtkHScrollbar" : @"GtkVScrollbar"];
+  GtkWidget *widget = [GGPainter getWidget: isHorizontal ? 
+				 @"GtkHScrollbar" : @"GtkVScrollbar"];
 
   NSImage *img;
     img = [painter paintBox: widget
                    withPart: "trough"
-                    andSize: _bounds
+                    andSize: bounds
                    withClip: NSZeroRect
                  usingState: GTK_STATE_NORMAL
                      shadow: GTK_SHADOW_OUT
                       style: widget->style];
 
-   [painter drawAndReleaseImage: img inFrame: _bounds flipped: YES];
+   [painter drawAndReleaseImage: img inFrame: bounds flipped: YES];
   ///////////////// END ADDITION
 
   if (NSIntersectsRect (rect, rectForPartKnobSlot) == YES)
     {
-      [self drawKnobSlot];
-      [self drawKnob];
+      [scroller drawKnobSlot];
+      [scroller drawKnob];
     }
 
   if (NSIntersectsRect (rect, rectForPartDecrementLine) == YES)
     {
-      [self drawArrow: NSScrollerDecrementArrow 
-            highlight: _hitPart == NSScrollerDecrementLine];
+      [scroller drawArrow: NSScrollerDecrementArrow 
+            highlight: hitPart == NSScrollerDecrementLine];
     }
   if (NSIntersectsRect (rect, rectForPartIncrementLine) == YES)
     {
-      [self drawArrow: NSScrollerIncrementArrow 
-            highlight: _hitPart == NSScrollerIncrementLine];
+      [scroller drawArrow: NSScrollerIncrementArrow 
+            highlight: hitPart == NSScrollerIncrementLine];
     }
 }
 
