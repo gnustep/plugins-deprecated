@@ -24,7 +24,7 @@
                               style: widget->style];
 
    [painter drawAndReleaseImage: img inFrame: rect flipped: YES];
- }
+}
 
  - (void) drawKnob
 {
