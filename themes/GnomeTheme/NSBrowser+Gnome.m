@@ -2,29 +2,36 @@
 #include <AppKit/NSBrowser.h>
 #include <GNUstepGUI/GSTheme.h>
 
-@implementation NSBrowser (Gnome)
+@implementation GSTheme (NSBrowser)
 
-- (void) drawRect: (NSRect)rect
+- (void) drawBrowserRect: (NSRect)rect
+		  inView: (NSView *)view
+	withScrollerRect: (NSRect)scrollerRect
+	      columnSize: (NSSize)columnSize
 {
   float scrollerWidth = [NSScroller scrollerWidth];
+  NSBrowser *browser = (NSBrowser *)view;
+  NSRect bounds = [view bounds];
 
   // Load the first column if not already done
-  if (!_isLoaded)
+  if (![browser isLoaded])
     {
-      [self loadColumnZero];
+      [browser loadColumnZero];
     }
 
   // Draws titles
-  if (_isTitled)
+  if ([browser isTitled])
     {
       int i;
 
-      for (i = _firstVisibleColumn; i <= _lastVisibleColumn; ++i)
+      for (i = [browser firstVisibleColumn]; 
+	   i <= [browser lastVisibleColumn]; 
+	   ++i)
         {
-          NSRect titleRect = [self titleFrameOfColumn: i];
+          NSRect titleRect = [browser titleFrameOfColumn: i];
           if (NSIntersectsRect (titleRect, rect) == YES)
             {
-              [self drawTitleOfColumn: i
+              [browser drawTitleOfColumn: i
                     inRect: titleRect];
             }
         }
@@ -33,28 +40,29 @@
   // Draws scroller border
   // deleted
 
-  if (!_separatesColumns)
+  if (![browser separatesColumns])
     {
       NSPoint p1,p2;
       int     i, visibleColumns;
-      float   hScrollerWidth = _hasHorizontalScroller ? scrollerWidth : 0;
+      float   hScrollerWidth = [browser hasHorizontalScroller] ? 
+	scrollerWidth : 0;
       
       // Columns borders
-      [[GSTheme theme] drawGrayBezel: _bounds withClip: rect];
+      [self drawGrayBezel: bounds withClip: rect];
       
       [[NSColor blackColor] set];
-      visibleColumns = [self numberOfVisibleColumns]; 
+      visibleColumns = [browser numberOfVisibleColumns]; 
       for (i = 1; i < visibleColumns; i++)
         {
-          p1 = NSMakePoint((_columnSize.width * i) + 2 + (i-1), 
-                           _columnSize.height + hScrollerWidth + 2);
-          p2 = NSMakePoint((_columnSize.width * i) + 2 + (i-1),
+          p1 = NSMakePoint((columnSize.width * i) + 2 + (i-1), 
+                           columnSize.height + hScrollerWidth + 2);
+          p2 = NSMakePoint((columnSize.width * i) + 2 + (i-1),
                            hScrollerWidth + 2);
           [NSBezierPath strokeLineFromPoint: p1 toPoint: p2];
         }
 
       // Horizontal scroller border
-      if (_hasHorizontalScroller)
+      if ([browser hasHorizontalScroller])
         {
           p1 = NSMakePoint(2, hScrollerWidth + 2);
           p2 = NSMakePoint(rect.size.width - 2, hScrollerWidth + 2);
