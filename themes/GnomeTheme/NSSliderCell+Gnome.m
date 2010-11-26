@@ -4,8 +4,10 @@
 #include "GGPainter.h"
 
 
- @implementation NSSliderCell (Gnome)
- - (void) drawBarInside: (NSRect)rect flipped: (BOOL)flipped
+@implementation GSTheme (NSSliderCell) 
+ - (void) drawBarInside: (NSRect)rect 
+		 inCell: (NSCell *)cell
+		flipped: (BOOL)flipped
  {
 
   [[NSColor windowBackgroundColor] drawSwatchInRect: rect];
@@ -19,27 +21,30 @@
                            withPart: "trough"
                             andSize: rect
                            withClip: NSZeroRect
-                         usingState: [self isEnabled] ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE
+                         usingState: [cell isEnabled] ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE
                              shadow: GTK_SHADOW_IN
                               style: widget->style];
 
    [painter drawAndReleaseImage: img inFrame: rect flipped: YES];
 }
 
- - (void) drawKnob
+- (void) drawKnobInCell: (NSCell *)cell
 {
-   [self setBordered: NO];
-   [self setBezeled: NO];
+  NSSliderCell *sliderCell = (NSSliderCell *)cell;
+  NSView *controlView = [cell controlView];
 
-   NSRect knobRect = [self knobRectFlipped: [_control_view isFlipped]];
+  [sliderCell setBordered: NO];
+  [sliderCell setBezeled: NO];
 
-   BOOL horizontal = (knobRect.size.width > knobRect.size.height);
-
-   if (horizontal)
-     knobRect.origin.y += 1;
-   else
-     knobRect.origin.x += 1;
-
-   [self drawKnob: knobRect];
+  NSRect knobRect = [sliderCell knobRectFlipped: [controlView isFlipped]];
+  
+  BOOL horizontal = (knobRect.size.width > knobRect.size.height);
+  
+  if (horizontal)
+    knobRect.origin.y += 1;
+  else
+    knobRect.origin.x += 1;
+  
+  [sliderCell drawKnob: knobRect];
 }
 @end
