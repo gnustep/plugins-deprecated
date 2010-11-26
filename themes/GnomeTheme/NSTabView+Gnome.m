@@ -3,33 +3,36 @@
 #include <GNUstepGUI/GSTheme.h>
 #include "GGPainter.h"
 
-@implementation NSTabView (Gnome)
+@implementation GSTheme (Gnome)
 
 // Drawing.
-
-- (void) drawRect: (NSRect)rect
+- (void) drawTabViewRect: (NSRect)rect
+		  inView: (NSView *)view
+	       withItems: (NSArray *)items
+	    selectedItem: (NSTabViewItem *)selected
 {
   NSGraphicsContext *ctxt = GSCurrentContext();
-  GSTheme           *theme = [GSTheme theme];
-  int               howMany = [_items count];
+  int               howMany = [items count];
   int               i;
   int               previousState = 0;
-  NSRect            aRect = _bounds;
+  NSRect            bounds = [view bounds];
+  NSRect            aRect = [view bounds];
   NSColor           *lineColour = [NSColor highlightColor];
-  NSColor           *backgroundColour = [[self window] backgroundColor];
-  BOOL              truncate = [self allowsTruncatedLabels];
+  NSColor           *backgroundColour = [[view window] backgroundColor];
+  BOOL              truncate = [(NSTabView *)view allowsTruncatedLabels];
+  NSTabViewType     type = [(NSTabView *)view tabViewType];
 
   GGPainter *painter = [GGPainter instance];
   GtkWidget *widget = [GGPainter getWidget: @"GtkNotebook"];
   NSImage   *img = nil;
 
   // Make sure some tab is selected
-  if (!_selected && howMany > 0)
-    [self selectFirstTabViewItem: nil];
+  if (!selected && howMany > 0)
+    [(NSTabView *)self selectFirstTabViewItem: nil];
 
   DPSgsave(ctxt);
 
-  switch (_type)
+  switch (type)
     {
       default:
       case NSTopTabsBezelBorder: 
@@ -111,17 +114,17 @@
   NSPoint iP;
   GtkPositionType position;
   float labelYCorrection;
-  if (_type == NSBottomTabsBezelBorder)
+  if (type == NSBottomTabsBezelBorder)
     {
-      iP.x = _bounds.origin.x;
-      iP.y = _bounds.origin.y;
+      iP.x = bounds.origin.x;
+      iP.y = bounds.origin.y;
       position = GTK_POS_TOP; // sic!
       labelYCorrection = 1.0;
     }   
-  else if (_type == NSTopTabsBezelBorder)
+  else if (type == NSTopTabsBezelBorder)
     {
-      iP.x = _bounds.origin.x;
-      iP.y = _bounds.size.height - 16;
+      iP.x = bounds.origin.x;
+      iP.y = bounds.size.height - 16;
       position = GTK_POS_BOTTOM; // sic!
       labelYCorrection = -2.0;
     }
@@ -130,7 +133,7 @@
     {
       NSRect r;
       NSRect fRect;
-      NSTabViewItem *anItem = [_items objectAtIndex: i];
+      NSTabViewItem *anItem = [items objectAtIndex: i];
       NSTabState itemState = [anItem tabState];
       NSSize s = [anItem sizeOfLabel: truncate];
 
@@ -144,9 +147,9 @@
       if (itemState == NSSelectedTab)
         {
           // Undraw the line that separates the tab from its view.
-          if (_type == NSBottomTabsBezelBorder)
+          if (type == NSBottomTabsBezelBorder)
             fRect.origin.y += 1;
-          else if (_type == NSTopTabsBezelBorder)
+          else if (type == NSTopTabsBezelBorder)
             fRect.origin.y -= 1;
 
           fRect.size.height += 1;
