@@ -8,13 +8,15 @@
 
 
 @implementation NSTableHeaderCell (Gnome)
-- (NSRect) drawingRectForBounds: (NSRect)theRect
+- (NSRect) tableHeaderCellDrawingRectForBounds: (NSRect)theRect
 {
   return theRect;
 }
 
-- (void) _drawBorderAndBackgroundWithFrame: (NSRect)cellFrame
-                                    inView: (NSView*)controlView
+- (void) drawTableHeaderCell: (NSTableHeaderCell *)cell
+                   withFrame: (NSRect)cellFrame
+                      inView: (NSView *)controlView
+                       state: (GSThemeControlState)aState
 {
   GGPainter *painter = [GGPainter instance];
 
@@ -22,7 +24,7 @@
 
   GtkStateType state = GTK_STATE_NORMAL;
 
-  if (![self isEnabled]) {
+  if (![cell isEnabled]) {
     state = GTK_STATE_INSENSITIVE;
   }
 
@@ -30,7 +32,8 @@
                           withPart: "button"
                            andSize: cellFrame
                           withClip: NSZeroRect
-                        usingState: _cell.is_highlighted ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL
+			usingState: (aState == GSThemeHighlightedState) ? 
+			  GTK_STATE_ACTIVE : GTK_STATE_NORMAL
                             shadow: GTK_SHADOW_OUT
                              style: widget->style];
 
