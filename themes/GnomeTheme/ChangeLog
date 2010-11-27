@@ -1,5 +1,12 @@
 2010-11-27 Gregory Casamento <greg.casamento@gmail.com>
 
+	* Changed all previously modified files to be
+	a category on GGnomeTheme instead of GSTheme to 
+	make certain they are loadable from the theme
+	manager.
+	
+2010-11-27 Gregory Casamento <greg.casamento@gmail.com>
+
 	* NSTableHeaderView+Gnome.m: Use new theme methods.
 
 2010-11-26 Gregory Casamento <greg.casamento@gmail.com>
