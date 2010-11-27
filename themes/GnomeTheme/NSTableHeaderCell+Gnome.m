@@ -39,11 +39,8 @@
 
   [painter drawAndReleaseImage: img inFrame: cellFrame flipped: YES];
 }
-@end
 
-
-@implementation GSTableCornerView (Gnome)
-- (void) drawRect: (NSRect)aRect
+- (void) drawTableCornerView: (NSView *)view withClip: (NSRect)aRect
 {
   /*
   NSRect cellFrame = aRect;
