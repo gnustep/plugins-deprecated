@@ -6,7 +6,8 @@
 /*
  * Overidden Methods
  */
-- (void)drawRect: (NSRect)aRect
+- (void)drawTableHeaderRect: (NSRect)aRect
+		     inView: (NSView *)view
 {
   NSArray *columns;
   int firstColumnToDraw;

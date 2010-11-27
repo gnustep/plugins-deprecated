@@ -1,3 +1,11 @@
+2010-11-27 Gregory Casamento <greg.casamento@gmail.com>
+
+	* NSTableHeaderView+Gnome.m: Use new theme methods.
+
+2010-11-26 Gregory Casamento <greg.casamento@gmail.com>
+
+	* NSTableHeaderCell+Gnome.m: Use new theme methods.
+
 2010-11-26 Gregory Casamento <greg.casamento@gmail.com>
 
 	* NSSliderCell+Gnome.m: Use new theme methods.
