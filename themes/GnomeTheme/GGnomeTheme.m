@@ -6,11 +6,23 @@
 #include <gtk/gtk.h>
 #include <cairo/cairo.h>
 
+static NSImage *_pbc_image[5];
+
 @interface GGnomeTheme (Private)
 - (void) drawStepperButton: (NSRect) aRect withArrowType: (GtkArrowType) arrow_type pressed: (BOOL) pressed;
 @end
 
 @implementation GGnomeTheme
+- (id) initWithBundle: (NSBundle *)bundle
+{
+  if((self = [super initWithBundle: bundle]) != nil)
+    {
+      ASSIGN(_pbc_image[0], [NSImage imageNamed: @"common_Nibble"]);
+      ASSIGN(_pbc_image[1], [NSImage imageNamed: @"common_3DArrowDown"]);
+    }
+  return self;
+}
+
 - (void) drawButton: (NSRect)frame
                  in: (NSCell*)cell
                view: (NSView*)view
