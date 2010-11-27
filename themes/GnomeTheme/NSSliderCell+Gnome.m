@@ -4,7 +4,7 @@
 #include "GGPainter.h"
 
 
-@implementation GSTheme (NSSliderCell) 
+@implementation GGnomeTheme (NSSliderCell) 
  - (void) drawBarInside: (NSRect)rect 
 		 inCell: (NSCell *)cell
 		flipped: (BOOL)flipped

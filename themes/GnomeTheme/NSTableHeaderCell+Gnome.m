@@ -2,12 +2,7 @@
 #include "GGnomeTheme.h"
 #include "GGPainter.h"
 
-@interface GSTableCornerView : NSView
-{}
-@end
-
-
-@implementation NSTableHeaderCell (Gnome)
+@implementation GGnomeTheme (NSTableHeaderCell)
 - (NSRect) tableHeaderCellDrawingRectForBounds: (NSRect)theRect
 {
   return theRect;

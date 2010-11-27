@@ -1,8 +1,9 @@
 #include <AppKit/AppKit.h>
 #include <AppKit/NSScrollView.h>
 #include <GNUstepGUI/GSTheme.h>
+#include "GGnomeTheme.h"
 
-@implementation GSTheme (NSScrollView)
+@implementation GGnomeTheme (NSScrollView)
 
 - (void) drawScrollViewRect: (NSRect)rect
 		     inView: (NSView *)view 

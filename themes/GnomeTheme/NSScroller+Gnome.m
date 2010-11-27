@@ -2,19 +2,9 @@
 #include <AppKit/NSScroller.h>
 #include <GNUstepGUI/GSTheme.h>
 #include "GGPainter.h"
+#include "GGnomeTheme.h"
 
-@interface NSScroller (Gnome)
-- (BOOL) isHorizontal;
-@end
-
-@implementation NSScroller (Gnome)
-- (BOOL) isHorizontal
-{
-  return _scFlags.isHorizontal;
-}
-@end
-
-@implementation GSTheme (NSScroller)
+@implementation GGnomeTheme (NSScroller)
 
 /*
  *	draw the scroller

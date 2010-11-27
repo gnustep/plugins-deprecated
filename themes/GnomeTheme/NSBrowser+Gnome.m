@@ -1,8 +1,9 @@
 #include <AppKit/AppKit.h>
 #include <AppKit/NSBrowser.h>
 #include <GNUstepGUI/GSTheme.h>
+#include "GGnomeTheme.h"
 
-@implementation GSTheme (NSBrowser)
+@implementation GGnomeTheme (NSBrowser)
 
 - (void) drawBrowserRect: (NSRect)rect
 		  inView: (NSView *)view

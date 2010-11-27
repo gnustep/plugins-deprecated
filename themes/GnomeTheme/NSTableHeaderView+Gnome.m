@@ -2,13 +2,15 @@
 #include "GGnomeTheme.h"
 #include "GGPainter.h"
 
-@implementation NSTableHeaderView (Gnome)
+@implementation GGnomeTheme (NSTableHeaderView)
 /*
  * Overidden Methods
  */
 - (void)drawTableHeaderRect: (NSRect)aRect
 		     inView: (NSView *)view
 {
+  NSTableHeaderView *tableHeaderView = (NSTableHeaderView *)view;
+  NSTableView *tableView = [tableHeaderView tableView];
   NSArray *columns;
   int firstColumnToDraw;
   int lastColumnToDraw;
@@ -19,28 +21,28 @@
   int i;
   NSCell *cell;
 
-  if (_tableView == nil)
+  if (tableView == nil)
     return;
 
-  firstColumnToDraw = [self columnAtPoint: NSMakePoint (aRect.origin.x,
+  firstColumnToDraw = [tableHeaderView columnAtPoint: NSMakePoint (aRect.origin.x,
                                                         aRect.origin.y)];
   if (firstColumnToDraw == -1)
     firstColumnToDraw = 0;
 
-  lastColumnToDraw = [self columnAtPoint: NSMakePoint (NSMaxX (aRect),
+  lastColumnToDraw = [tableHeaderView columnAtPoint: NSMakePoint (NSMaxX (aRect),
                                                        aRect.origin.y)];
   if (lastColumnToDraw == -1)
-    lastColumnToDraw = [_tableView numberOfColumns] - 1;
+    lastColumnToDraw = [tableView numberOfColumns] - 1;
 
-  drawingRect = [self headerRectOfColumn: firstColumnToDraw];
-  if (![self isFlipped])
+  drawingRect = [tableHeaderView headerRectOfColumn: firstColumnToDraw];
+  if (![tableHeaderView isFlipped])
     {
       drawingRect.origin.y++;
     }
   //avoid gap: drawingRect.size.height--;
 
-  columns = [_tableView tableColumns];
-  highlightedTableColumn = [_tableView highlightedTableColumn];
+  columns = [tableView tableColumns];
+  highlightedTableColumn = [tableView highlightedTableColumn];
   
   for (i = firstColumnToDraw; i < lastColumnToDraw; i++)
     {
@@ -49,7 +51,7 @@
       drawingRect.size.width = width;
       cell = [column headerCell];
       if ((column == highlightedTableColumn)
-          || [_tableView isColumnSelected: i])
+          || [tableView isColumnSelected: i])
         {
           [cell setHighlighted: YES];
         }
@@ -58,17 +60,17 @@
           [cell setHighlighted: NO];
         }
       [cell drawWithFrame: drawingRect
-                           inView: self];
+                           inView: tableHeaderView];
       drawingRect.origin.x += width;
     }
-  if (lastColumnToDraw == [_tableView numberOfColumns] - 1)
+  if (lastColumnToDraw == [tableView numberOfColumns] - 1)
     {
       column = [columns objectAtIndex: lastColumnToDraw];
       width = [column width] - 1;
       drawingRect.size.width = width;
       cell = [column headerCell];
       if ((column == highlightedTableColumn)
-          || [_tableView isColumnSelected: lastColumnToDraw])
+          || [tableView isColumnSelected: lastColumnToDraw])
         {
           [cell setHighlighted: YES];
         }
@@ -77,7 +79,7 @@
           [cell setHighlighted: NO];
         }
       [cell drawWithFrame: drawingRect
-                           inView: self];
+                           inView: tableHeaderView];
       drawingRect.origin.x += width;
     }
   else
@@ -87,7 +89,7 @@
       drawingRect.size.width = width;
       cell = [column headerCell];
       if ((column == highlightedTableColumn)
-          || [_tableView isColumnSelected: lastColumnToDraw])
+          || [tableView isColumnSelected: lastColumnToDraw])
         {
           [cell setHighlighted: YES];
         }
@@ -96,7 +98,7 @@
           [cell setHighlighted: NO];
         }
       [cell drawWithFrame: drawingRect
-                           inView: self];
+                           inView: tableHeaderView];
       drawingRect.origin.x += width;
     }
 

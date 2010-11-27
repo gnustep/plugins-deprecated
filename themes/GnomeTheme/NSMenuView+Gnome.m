@@ -3,7 +3,7 @@
 #include "GGnomeTheme.h"
 #include "GGPainter.h"
 
-@implementation GSTheme (NSMenuView)
+@implementation GGnomeTheme (NSMenuView)
 
 - (void) drawMenuRect: (NSRect)rect
 	       inView: (NSView *)view

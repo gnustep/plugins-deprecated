@@ -2,8 +2,9 @@
 #include <AppKit/NSTabView.h>
 #include <GNUstepGUI/GSTheme.h>
 #include "GGPainter.h"
+#include "GGnomeTheme.h"
 
-@implementation GSTheme (NSTabView)
+@implementation GGnomeTheme (NSTabView)
 
 // Drawing.
 - (void) drawTabViewRect: (NSRect)rect
