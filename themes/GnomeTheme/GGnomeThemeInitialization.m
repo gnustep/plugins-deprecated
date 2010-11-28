@@ -375,8 +375,6 @@ static void setup_palette()
 
 - (void) activate
 {
-  [super activate];
-
   init_gtk_window();
   init_gtk_widgets();
   setup_palette();
@@ -386,6 +384,7 @@ static void setup_palette()
   [userDefaults setFloat: 0.0f forKey: @"GSScrollerButtonsOffset"];
 
   NSLog (@"Gnome theme initialized");
+  [super activate];
 }
 
 @end
