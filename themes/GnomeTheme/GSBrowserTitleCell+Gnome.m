@@ -3,12 +3,10 @@
 #include "GGnomeTheme.h"
 #include "GGPainter.h"
 
-@interface GSBrowserTitleCell: NSTableHeaderCell
-@end
-
-@implementation GSBrowserTitleCell (Gnome)
-- (void) _drawBorderAndBackgroundWithFrame: (NSRect)cellFrame
-                                    inView: (NSView*)controlView
+@implementation GGnomeTheme (GSBrowserTitleCell)
+- (void) drawBrowserHeaderCell: (NSCell *)cell
+		     withFrame: (NSRect)cellFrame
+			inView: (NSView *)controlView
 {
   GGPainter *painter = [GGPainter instance];
 
@@ -16,7 +14,7 @@
 
   GtkStateType state = GTK_STATE_NORMAL;
 
-  if (![self isEnabled]) {
+  if (![cell isEnabled]) {
     state = GTK_STATE_INSENSITIVE;
   }
 
@@ -31,5 +29,4 @@
 
   [painter drawAndReleaseImage: img inFrame: cellFrame flipped: NO];
 }
-
 @end
