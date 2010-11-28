@@ -3,6 +3,7 @@
   NSPrincipalClass = "GGnomeTheme";
   GSThemeAuthors = (
 	"Hans Baier",
+	"Gregory John Casamento",
   );
   GSThemeDetails = "Gtk+ native theme";
   GSThemeIcon = gtk+.png;     
