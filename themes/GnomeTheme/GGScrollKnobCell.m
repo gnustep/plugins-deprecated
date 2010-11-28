@@ -28,6 +28,7 @@
   GGScrollKnobCell *cell = [[GGScrollKnobCell alloc] initTextCell: @""];
   [cell setKnob: is_knob];
   [cell setHorizontal: is_horizontal];
+  return cell;
 }
 
 

@@ -22,14 +22,14 @@
   NSColor           *backgroundColour = [[view window] backgroundColor];
   BOOL              truncate = [(NSTabView *)view allowsTruncatedLabels];
   NSTabViewType     type = [(NSTabView *)view tabViewType];
-
+  NSTabView *tabView = (NSTabView *)view;
   GGPainter *painter = [GGPainter instance];
   GtkWidget *widget = [GGPainter getWidget: @"GtkNotebook"];
   NSImage   *img = nil;
 
   // Make sure some tab is selected
   if (!selected && howMany > 0)
-    [(NSTabView *)self selectFirstTabViewItem: nil];
+    [tabView selectFirstTabViewItem: nil];
 
   DPSgsave(ctxt);
 

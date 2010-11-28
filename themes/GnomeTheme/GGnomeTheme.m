@@ -190,15 +190,24 @@ static NSImage *_pbc_image[5];
 - (NSCell*) cellForScrollerKnob: (BOOL)horizontal
 {
   GGScrollKnobCell *cell;
-
   cell = [GGScrollKnobCell newWithKnob: YES horizontal: horizontal];
-  [cell setButtonType: NSMomentaryChangeButton];
-  if (horizontal)
-      [self setName: GSScrollerHorizontalKnob forElement: cell temporary: YES];
-  else
-      [self setName: GSScrollerVerticalKnob forElement: cell temporary: YES];
-
-  RELEASE(cell);
+  if (cell != nil)
+    {
+      [cell setButtonType: NSMomentaryChangeButton];
+      if (horizontal)
+	{
+	  [self setName: GSScrollerHorizontalKnob 
+		forElement: cell 
+		temporary: YES];
+	}
+      else
+	{
+	  [self setName: GSScrollerVerticalKnob 
+		forElement: cell 
+		temporary: YES];
+	}
+      RELEASE(cell);
+    }
   return cell;
 }
 

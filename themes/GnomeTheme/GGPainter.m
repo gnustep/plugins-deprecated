@@ -185,11 +185,17 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
     GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
     assert(icon_theme);
     GdkPixbuf* icon = gtk_icon_theme_load_icon(icon_theme, iconName, size, 0, NULL);
-    assert(icon);
-
-    NSImage *converted = [self fromPixbuf: icon];
-
-    gdk_pixbuf_unref(icon);
+    NSImage *converted = nil;
+    if(icon)
+      {
+	//assert(icon);
+	converted = [self fromPixbuf: icon];
+	gdk_pixbuf_unref(icon);
+      }
+    else
+      {
+	NSLog(@"Failed to look up theme-based icon for iconName %s, using default.",iconName);
+      }
 
     return converted;
 }
