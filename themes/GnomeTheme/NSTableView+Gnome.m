@@ -2,9 +2,19 @@
 #include <AppKit/NSTabView.h>
 #include <GNUstepGUI/GSTheme.h>
 #include "GGPainter.h"
+#include "GGnomeTheme.h"
 
-@implementation NSTableView (Gnome)
-- (void) drawBackgroundInClipRect: (NSRect)clipRect
+@interface NSTableView (GGnomePrivate)
+- (float *) _columnOrigins;
+- (void) _willDisplayCell: (NSCell*)cell
+	   forTableColumn: (NSTableColumn *)tb
+		      row: (int)index;
+@end
+
+@implementation GGnomeTheme (NSTableView)
+- (void) drawTableViewBackgroundInClipRect: (NSRect)clipRect
+				    inView: (NSView *)view
+		       withBackgroundColor: (NSColor *)backgroundColor
 {
   GGPainter *painter = [GGPainter instance];
   GtkWidget *widget = [GGPainter getWidget: @"GtkTreeView"];
@@ -21,7 +31,8 @@
   [painter drawAndReleaseImage: img inFrame: clipRect flipped: YES];
 } 
 
-- (void) drawGridInClipRect: (NSRect)aRect
+- (void) drawTableViewGridInClipRect: (NSRect)aRect
+			      inView: (NSView *)view
 {
   float minX = NSMinX (aRect);
   float maxX = NSMaxX (aRect);
@@ -31,21 +42,27 @@
   float x_pos;
   int startingColumn; 
   int endingColumn;
-
+  NSRect bounds = [view bounds];
+  NSTableView *tableView = (NSTableView *)view;
   NSGraphicsContext *ctxt = GSCurrentContext ();
   float position;
-
-  int startingRow    = [self rowAtPoint: 
-			       NSMakePoint (_bounds.origin.x, minY)];
-  int endingRow      = [self rowAtPoint: 
-			       NSMakePoint (_bounds.origin.x, maxY)];
+  int numberOfColumns = [tableView numberOfColumns];
+  int startingRow    = [tableView rowAtPoint: 
+			       NSMakePoint (bounds.origin.x, minY)];
+  int endingRow      = [tableView rowAtPoint: 
+			       NSMakePoint (bounds.origin.x, maxY)];
 
   /* Using columnAtPoint:, rowAtPoint: here calls them only twice 
 
      per drawn rect */
   x_pos = minX;
   i = 0;
-  while ((i < _numberOfColumns) && (x_pos > _columnOrigins[i]))
+  float *columnOrigins = [tableView _columnOrigins];
+  NSColor *gridColor = [tableView gridColor];
+  int numberOfRows = [tableView numberOfRows];
+  int rowHeight = [tableView rowHeight];
+
+  while ((i < numberOfColumns) && (x_pos > columnOrigins[i]))
     {
       i++;
     }
@@ -53,31 +70,31 @@
 
   x_pos = maxX;
   // Nota Bene: we do *not* reset i
-  while ((i < _numberOfColumns) && (x_pos > _columnOrigins[i]))
+  while ((i < numberOfColumns) && (x_pos > columnOrigins[i]))
     {
       i++;
     }
   endingColumn = (i - 1);
 
   if (endingColumn == -1)
-    endingColumn = _numberOfColumns - 1;
+    endingColumn = numberOfColumns - 1;
   /*
-  int startingColumn = [self columnAtPoint: 
-			       NSMakePoint (minX, _bounds.origin.y)];
-  int endingColumn   = [self columnAtPoint: 
-			       NSMakePoint (maxX, _bounds.origin.y)];
+  int startingColumn = [tableView columnAtPoint: 
+			       NSMakePoint (minX, bounds.origin.y)];
+  int endingColumn   = [tableView columnAtPoint: 
+			       NSMakePoint (maxX, bounds.origin.y)];
   */
 
   DPSgsave (ctxt);
   DPSsetlinewidth (ctxt, 1);
-  [_gridColor set];
+  [gridColor set];
 
 
   GGPainter *painter = [GGPainter instance];
   GtkWidget *widget = [GGPainter getWidget: @"GtkTreeView"];
   gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(widget), TRUE);
 
-  NSRect image_rect = NSMakeRect(0, 0, maxX - minX, _rowHeight);
+  NSRect image_rect = NSMakeRect(0, 0, maxX - minX, rowHeight);
 
   NSImage *even_row_image = [painter paintFlatBox: widget
                                          withPart: "cell_even_ruled"
@@ -94,26 +111,26 @@
                                       usingState: GTK_STATE_NORMAL
                                           shadow: GTK_SHADOW_NONE
                                             style: widget->style];
-  if (_numberOfRows > 0)
+  if (numberOfRows > 0)
     {
       /* Draw rows */
       if (startingRow == -1)
 	startingRow = 0;
       if (endingRow == -1)
-	endingRow = _numberOfRows - 1;
+	endingRow = numberOfRows - 1;
       
-      position = _bounds.origin.y;
-      position += startingRow * _rowHeight;
+      position = bounds.origin.y;
+      position += startingRow * rowHeight;
       for (i = startingRow; i <= endingRow + 1; i++)
 	{
-          NSRect r = NSMakeRect(minX, position, maxX - minX, _rowHeight);
+          NSRect r = NSMakeRect(minX, position, maxX - minX, rowHeight);
 
           if (i%2 == 0)
             [even_row_image drawInRect: r fromRect: image_rect operation: NSCompositeSourceOver fraction: 1.0];
           else
             [odd_row_image drawInRect: r fromRect: image_rect operation: NSCompositeSourceOver fraction: 1.0];
 
-	  position += _rowHeight;
+	  position += rowHeight;
 	}
     }
 
@@ -124,9 +141,10 @@
   gint8 *dash_list;
   float dash_list_float[2];
   GdkGCValues lineGCValues;
+  NSArray *tableColumns = [tableView tableColumns];
 
   gdk_gc_get_values(&widget->style->black_gc[GTK_STATE_NORMAL], &lineGCValues);
-  NSColor *lineColor = [GGPainter fromGdkColor: lineGCValues.background];
+  // NSColor *lineColor = [GGPainter fromGdkColor: lineGCValues.background];
 
   gtk_widget_style_get (widget,
                         "grid-line-width", &line_width,
@@ -135,30 +153,30 @@
   dash_list_float[0] = (float) dash_list[0];
   dash_list_float[1] = (float) dash_list[1];
 
-  [_gridColor set];
+  [gridColor set];
   
   DPSsetlinewidth(ctxt, (float) line_width);
   DPSsetdash(ctxt, dash_list_float, 2, 0);
   
-  if (_numberOfColumns > 0)
+  if (numberOfColumns > 0)
     {
-      int lastRowPosition = position - _rowHeight;
+      int lastRowPosition = position - rowHeight;
       /* Draw vertical lines */
       if (startingColumn == -1)
 	startingColumn = 0;
       if (endingColumn == -1)
-	endingColumn = _numberOfColumns - 1;
+	endingColumn = numberOfColumns - 1;
 
       for (i = startingColumn; i <= endingColumn; i++)
 	{
-	  DPSmoveto (ctxt, _columnOrigins[i], minY);
-	  DPSlineto (ctxt, _columnOrigins[i], lastRowPosition);
+	  DPSmoveto (ctxt, columnOrigins[i], minY);
+	  DPSlineto (ctxt, columnOrigins[i], lastRowPosition);
 	  DPSstroke (ctxt);
 	}
-      position =  _columnOrigins[endingColumn];
-      position += [[_tableColumns objectAtIndex: endingColumn] width];  
+      position =  columnOrigins[endingColumn];
+      position += [[tableColumns objectAtIndex: endingColumn] width];  
       /* Last vertical line must moved a pixel to the left */
-      if (endingColumn == (_numberOfColumns - 1))
+      if (endingColumn == (numberOfColumns - 1))
 	position -= 1;
       DPSmoveto (ctxt, position, minY);
       DPSlineto (ctxt, position, lastRowPosition);
@@ -169,10 +187,15 @@
 }
 
 
-- (void) highlightSelectionInClipRect: (NSRect)clipRect
-
+- (void) highlightTableViewSelectionInClipRect: (NSRect)clipRect
+					inView: (NSView *)view
+			      selectingColumns: (BOOL)selectingColumns
 {
-  if (_selectingColumns == NO)
+  NSTableView *tableView = (NSTableView *)view;
+  //int numberOfRows = [tableView numberOfRows];
+  int numberOfColumns = [tableView numberOfColumns];
+
+  if (selectingColumns == NO)
     {
       int selectedRowsCount;
       int row;
@@ -180,25 +203,25 @@
       
       GGPainter *painter = [GGPainter instance];
       GtkWidget *widget  = [GGPainter getWidget: @"GtkTreeView"];
+      int numberOfRows = [tableView numberOfRows];
+      selectedRowsCount = [[tableView selectedRowIndexes] count];
 
-      selectedRowsCount = [_selectedRows count];
-      
       if (selectedRowsCount == 0)
 	return;
       
       /* highlight selected rows */
-      startingRow = [self rowAtPoint: NSMakePoint(0, NSMinY(clipRect))];
-      endingRow   = [self rowAtPoint: NSMakePoint(0, NSMaxY(clipRect))];
+      startingRow = [tableView rowAtPoint: NSMakePoint(0, NSMinY(clipRect))];
+      endingRow   = [tableView rowAtPoint: NSMakePoint(0, NSMaxY(clipRect))];
       
       if (startingRow == -1)
 	startingRow = 0;
       if (endingRow == -1)
-	endingRow = _numberOfRows - 1;
+	endingRow = numberOfRows - 1;
       
-      row = [_selectedRows indexGreaterThanOrEqualToIndex: startingRow];
+      row = [[tableView selectedRowIndexes] indexGreaterThanOrEqualToIndex: startingRow];
       while ((row != NSNotFound) && (row <= endingRow))
 	{          
-          NSRect rowRect = [self rectOfRow: row];
+          NSRect rowRect = [tableView rectOfRow: row];
 
           NSImage *img = [painter paintFocus: widget
                                     withPart: "treeview"
@@ -208,8 +231,8 @@
 
           [painter drawAndReleaseImage: img inFrame: rowRect flipped: YES];
 
-	  //NSRectFill(NSIntersectionRect([self rectOfRow: row], clipRect));
-	  row = [_selectedRows indexGreaterThanIndex: row];
+	  //NSRectFill(NSIntersectionRect([tableView rectOfRow: row], clipRect));
+	  row = [[tableView selectedRowIndexes] indexGreaterThanIndex: row];
 	}	  
     }
   else // Selecting columns
@@ -218,57 +241,63 @@
       unsigned int column;
       int startingColumn, endingColumn;
       
-      selectedColumnsCount = [_selectedColumns count];
+      selectedColumnsCount = [[tableView selectedColumnIndexes] count];
       
       if (selectedColumnsCount == 0)
 	return;
       
       /* highlight selected columns */
-      startingColumn = [self columnAtPoint: NSMakePoint(NSMinX(clipRect), 0)];
-      endingColumn = [self columnAtPoint: NSMakePoint(NSMaxX(clipRect), 0)];
+      startingColumn = [tableView columnAtPoint: NSMakePoint(NSMinX(clipRect), 0)];
+      endingColumn = [tableView columnAtPoint: NSMakePoint(NSMaxX(clipRect), 0)];
 
       if (startingColumn == -1)
 	startingColumn = 0;
       if (endingColumn == -1)
-	endingColumn = _numberOfColumns - 1;
+	endingColumn = numberOfColumns - 1;
 
-      column = [_selectedColumns indexGreaterThanOrEqualToIndex: startingColumn];
+      column = [[tableView selectedColumnIndexes] indexGreaterThanOrEqualToIndex: startingColumn];
       while ((column != NSNotFound) && (column <= endingColumn))
 	{
-	  NSHighlightRect(NSIntersectionRect([self rectOfColumn: column],
+	  NSHighlightRect(NSIntersectionRect([tableView rectOfColumn: column],
 					     clipRect));
-	  column = [_selectedColumns indexGreaterThanIndex: column];
+	  column = [[tableView selectedColumnIndexes] indexGreaterThanIndex: column];
 	}	  
     }
 }
 
-- (void) drawRect: (NSRect)aRect
+- (void) drawTableViewRect: (NSRect)aRect
+		    inView: (NSView *)view
 {
   int startingRow;
   int endingRow;
   int i;
+  NSTableView *tableView = (NSTableView *)view;
+  int numberOfRows = [tableView numberOfRows];
+  int numberOfColumns = [tableView numberOfColumns];
+  BOOL drawsGrid = [tableView drawsGrid];
+  NSRect bounds = [view bounds];
 
   /* Draw background */
-  [self drawBackgroundInClipRect: aRect];
+  [tableView drawBackgroundInClipRect: aRect];
 
-  if ((_numberOfRows == 0) || (_numberOfColumns == 0))
+  if ((numberOfRows == 0) || (numberOfColumns == 0))
     {
       return;
     }
 
   /* Draw grid */
-  if (_drawsGrid)
+  if (drawsGrid)
     {
-      [self drawGridInClipRect: aRect];
+      [tableView drawGridInClipRect: aRect];
     }
 
   /* Draw selection */
-  [self highlightSelectionInClipRect: aRect];
+  [tableView highlightSelectionInClipRect: aRect];
   
   /* Draw visible cells */
   /* Using rowAtPoint: here calls them only twice per drawn rect */
-  startingRow = [self rowAtPoint: NSMakePoint (0, NSMinY (aRect))];
-  endingRow   = [self rowAtPoint: NSMakePoint (0, NSMaxY (aRect))];
+  startingRow = [tableView rowAtPoint: NSMakePoint (0, NSMinY (aRect))];
+  endingRow   = [tableView rowAtPoint: NSMakePoint (0, NSMaxY (aRect))];
 
   if (startingRow == -1)
     {
@@ -276,27 +305,30 @@
     }
   if (endingRow == -1)
     {
-      endingRow = _numberOfRows - 1;
+      endingRow = numberOfRows - 1;
     }
   //  NSLog(@"drawRect : %d-%d", startingRow, endingRow);
   {
     SEL sel = @selector(drawRow:clipRect:);
-    IMP imp = [self methodForSelector: sel];
+    IMP imp = [tableView methodForSelector: sel];
     
     for (i = startingRow; i <= endingRow; i++)
       {
-        (*imp)(self, sel, i, aRect);
+        (*imp)(tableView, sel, i, aRect);
       }
   }
   
   // paint frame around table view like in Gtk+
   GtkWidget *widget  = [GGPainter getWidget: @"GtkTreeView"];
   [[GGPainter fromGdkColor: widget->style->dark[GTK_STATE_NORMAL]] set];
-  NSFrameRect(_bounds);
+  NSFrameRect(bounds);
 }
 
-- (void) drawRow: (int)rowIndex clipRect: (NSRect)clipRect
+- (void) drawTableViewRow: (int)rowIndex 
+		 clipRect: (NSRect)clipRect
+		   inView: (NSView *)view
 {
+  NSTableView *tableView = (NSTableView *)view;
   int startingColumn; 
   int endingColumn;
   NSTableColumn *tb;
@@ -304,8 +336,15 @@
   NSCell *cell;
   int i;
   float x_pos;
+  id dataSource = [tableView dataSource];
+  NSArray *tableColumns = [tableView tableColumns];
+  // int numberOfRows = [tableView numberOfRows];
+  int numberOfColumns = [tableView numberOfColumns];
+  float *columnOrigins = [tableView _columnOrigins];
+  int editedRow = [tableView editedRow];
+  int editedColumn = [tableView editedColumn];
 
-  if (_dataSource == nil)
+  if (dataSource == nil)
     {
       return;
     }
@@ -316,7 +355,7 @@
   /* Determine starting column as fast as possible */
   x_pos = NSMinX (clipRect);
   i = 0;
-  while ((i < _numberOfColumns) && (x_pos > _columnOrigins[i]))
+  while ((i < numberOfColumns) && (x_pos > columnOrigins[i]))
     {
       i++;
     }
@@ -328,31 +367,31 @@
   /* Determine ending column as fast as possible */
   x_pos = NSMaxX (clipRect);
   // Nota Bene: we do *not* reset i
-  while ((i < _numberOfColumns) && (x_pos > _columnOrigins[i]))
+  while ((i < numberOfColumns) && (x_pos > columnOrigins[i]))
     {
       i++;
     }
   endingColumn = (i - 1);
 
   if (endingColumn == -1)
-    endingColumn = _numberOfColumns - 1;
+    endingColumn = numberOfColumns - 1;
 
   /* Draw the row between startingColumn and endingColumn */
   for (i = startingColumn; i <= endingColumn; i++)
     {
-      if (i != _editedColumn || rowIndex != _editedRow)
+      if (i != editedColumn || rowIndex != editedRow)
 	{
-	  tb = [_tableColumns objectAtIndex: i];
+	  tb = [tableColumns objectAtIndex: i];
 	  cell = [tb dataCellForRow: rowIndex];
-	  [self _willDisplayCell: cell
+	  [tableView _willDisplayCell: cell
 		forTableColumn: tb
 		row: rowIndex];
-	  [cell setObjectValue: [_dataSource tableView: self
+	  [cell setObjectValue: [dataSource tableView: tableView
 					     objectValueForTableColumn: tb
 					     row: rowIndex]]; 
-	  drawingRect = [self frameOfCellAtColumn: i
+	  drawingRect = [tableView frameOfCellAtColumn: i
 			      row: rowIndex];
-	  [cell drawWithFrame: drawingRect inView: self];
+	  [cell drawWithFrame: drawingRect inView: tableView];
 	}
     }
 }
