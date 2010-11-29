@@ -58,8 +58,8 @@ typedef int (*x11ErrorHandler)(Display*, XErrorEvent*);
 
 void init_gtk_window()
 {
-  NSString *themeName = nil;
-
+  static NSString *themeName = nil;
+  
   if ( [GGPainter getWidget: @"GtkWindow"] == (GtkWidget *)nil && [themeName length] == 0) {
     NSLog (@"initializing GtkWindow");
     themeName = getThemeName();
@@ -92,7 +92,7 @@ void init_gtk_window()
 void setup_gtk_widget(GtkWidget* widget)
 {
     if (GTK_IS_WIDGET(widget)) {
-        GtkWidget* protoLayout = 0;
+        static GtkWidget* protoLayout = 0;
 
         if (!protoLayout) {
             protoLayout = gtk_fixed_new();
@@ -173,52 +173,52 @@ void init_gtk_widgets()
 
 void gtkStyleSetCallback(GtkWidget* widget, GtkStyle* style, void* foo)
 {
-    NSString *oldTheme = @"gs_not_set";
+  static NSString *oldTheme = @"gs_not_set";
 
-    init_gtk_widgets();
-
-    if ( ![oldTheme isEqualToString: getThemeName()] ) {
-        oldTheme = getThemeName();
-        //TODO care about widget palette stuff here
-    }
+  init_gtk_widgets();
+  
+  if ( ![oldTheme isEqualToString: getThemeName()] ) {
+    oldTheme = getThemeName();
+    //TODO care about widget palette stuff here
+  }
 }
 
 NSString *classPath(GtkWidget *widget)
 {
-    char* class_path;
-    gtk_widget_path (widget, NULL, &class_path, NULL);
-    NSString *path = [NSString stringWithUTF8String: class_path];
-
-    // Remove the prefixes
-    path = [path stringByReplacingString: @"GtkWindow." withString: @""];
-    path = [path stringByReplacingString: @"GtkFixed." withString: @""];
-
-    return path;
+  char* class_path;
+  gtk_widget_path (widget, NULL, &class_path, NULL);
+  NSString *path = [NSString stringWithUTF8String: class_path];
+  
+  // Remove the prefixes
+  path = [path stringByReplacingString: @"GtkWindow." withString: @""];
+  path = [path stringByReplacingString: @"GtkFixed." withString: @""];
+  
+  return path;
 }
 
 void add_widget_to_map(GtkWidget *widget)
 {
-    if (GTK_IS_WIDGET(widget)) {
-       gtk_widget_realize(widget);
-       NSLog(@"registering widget: %@", classPath(widget));
-       [GGPainter setWidget: widget forKey: classPath(widget)];
-    }
+  if (GTK_IS_WIDGET(widget)) {
+    gtk_widget_realize(widget);
+    NSLog(@"registering widget: %@", classPath(widget));
+    [GGPainter setWidget: widget forKey: classPath(widget)];
+  }
 }
 
 void add_all_sub_widgets(GtkWidget *widget, gpointer v)
 {
-    add_widget_to_map(widget);
-    if (GTK_CHECK_TYPE ((widget), gtk_container_get_type()))
-        gtk_container_forall((GtkContainer*)widget, add_all_sub_widgets, NULL);
+  add_widget_to_map(widget);
+  if (GTK_CHECK_TYPE ((widget), gtk_container_get_type()))
+    gtk_container_forall((GtkContainer*)widget, add_all_sub_widgets, NULL);
 }
 
 void add_widget(GtkWidget *widget)
 {
-    if (widget) {
-        setup_gtk_widget(widget);
-        add_all_sub_widgets(widget, 0);
-        g_signal_connect(widget, "style-set", G_CALLBACK(gtkStyleSetCallback), NULL);
-    }
+  if (widget) {
+    setup_gtk_widget(widget);
+    add_all_sub_widgets(widget, 0);
+    g_signal_connect(widget, "style-set", G_CALLBACK(gtkStyleSetCallback), NULL);
+  }
 }
 
 NSSize scale_size(NSSize orig, gfloat factor)
