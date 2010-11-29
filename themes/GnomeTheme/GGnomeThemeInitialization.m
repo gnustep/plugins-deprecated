@@ -58,7 +58,7 @@ typedef int (*x11ErrorHandler)(Display*, XErrorEvent*);
 
 void init_gtk_window()
 {
-  static NSString *themeName = nil;
+  NSString *themeName = nil;
 
   if ( [GGPainter getWidget: @"GtkWindow"] == (GtkWidget *)nil && [themeName length] == 0) {
     NSLog (@"initializing GtkWindow");
