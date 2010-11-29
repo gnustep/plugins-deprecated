@@ -22,22 +22,15 @@
 **
 ****************************************************************************/
 
-#include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
-#include <X11/Xlib.h>
-#include <unistd.h>
-#include <gdk/gdkx.h>
-
+#include "GGnomeThemeInitialization.h"
 #include "GGnomeTheme.h"
 #include "GGPainter.h"
-
-@implementation GGnomeTheme (Initialization)
 
 BOOL hasRgbaColormap = NO;
 
 static int displayDepth  =  -1;
 
-static NSString *getGConfString(NSString *value)
+NSString *getGConfString(NSString *value)
 {
   NSString *retVal;
 
@@ -56,16 +49,16 @@ static NSString *getGConfString(NSString *value)
   return retVal;
 }
 
-static NSString *getThemeName()
+NSString *getThemeName()
 {
   return getGConfString(@"/desktop/gnome/interface/gtk_theme");
 }
 
 typedef int (*x11ErrorHandler)(Display*, XErrorEvent*);
 
-static void init_gtk_window()
+void init_gtk_window()
 {
-  static NSString *themeName;
+  static NSString *themeName = nil;
 
   if ( [GGPainter getWidget: @"GtkWindow"] == (GtkWidget *)nil && [themeName length] == 0) {
     NSLog (@"initializing GtkWindow");
@@ -96,10 +89,10 @@ static void init_gtk_window()
   }
 }
 
-static void setup_gtk_widget(GtkWidget* widget)
+void setup_gtk_widget(GtkWidget* widget)
 {
     if (GTK_IS_WIDGET(widget)) {
-        static GtkWidget* protoLayout = 0;
+        GtkWidget* protoLayout = 0;
 
         if (!protoLayout) {
             protoLayout = gtk_fixed_new();
@@ -113,9 +106,9 @@ static void setup_gtk_widget(GtkWidget* widget)
     }
 }
 
-static void add_widget(GtkWidget *widget);
+void add_widget(GtkWidget *widget);
 
-static void init_gtk_widgets()
+void init_gtk_widgets()
 {
   if ( [GGPainter getWidget: @"GtkButton"] == (GtkWidget *)nil) {
     add_widget(gtk_button_new());
@@ -178,9 +171,9 @@ static void init_gtk_widgets()
     NSLog(@"Widget Map initialized: %@", [[GGPainter widgetMap] description]);
 }
 
-static void gtkStyleSetCallback(GtkWidget* widget, GtkStyle* style, void* foo)
+void gtkStyleSetCallback(GtkWidget* widget, GtkStyle* style, void* foo)
 {
-    static NSString *oldTheme = @"gs_not_set";
+    NSString *oldTheme = @"gs_not_set";
 
     init_gtk_widgets();
 
@@ -190,7 +183,7 @@ static void gtkStyleSetCallback(GtkWidget* widget, GtkStyle* style, void* foo)
     }
 }
 
-static NSString *classPath(GtkWidget *widget)
+NSString *classPath(GtkWidget *widget)
 {
     char* class_path;
     gtk_widget_path (widget, NULL, &class_path, NULL);
@@ -203,7 +196,7 @@ static NSString *classPath(GtkWidget *widget)
     return path;
 }
 
-static void add_widget_to_map(GtkWidget *widget)
+void add_widget_to_map(GtkWidget *widget)
 {
     if (GTK_IS_WIDGET(widget)) {
        gtk_widget_realize(widget);
@@ -212,14 +205,14 @@ static void add_widget_to_map(GtkWidget *widget)
     }
 }
 
-static void add_all_sub_widgets(GtkWidget *widget, gpointer v)
+void add_all_sub_widgets(GtkWidget *widget, gpointer v)
 {
     add_widget_to_map(widget);
     if (GTK_CHECK_TYPE ((widget), gtk_container_get_type()))
         gtk_container_forall((GtkContainer*)widget, add_all_sub_widgets, NULL);
 }
 
-static void add_widget(GtkWidget *widget)
+void add_widget(GtkWidget *widget)
 {
     if (widget) {
         setup_gtk_widget(widget);
@@ -228,24 +221,24 @@ static void add_widget(GtkWidget *widget)
     }
 }
 
-static NSSize scale_size(NSSize orig, gfloat factor)
+NSSize scale_size(NSSize orig, gfloat factor)
 {
   return NSMakeSize(orig.width * factor, orig.height * factor);
 }
 
-static void replace_icon(NSString *icon_name, NSImage *new_image)
+void replace_icon(NSString *icon_name, NSImage *new_image)
 {
   NSImage *img = [NSImage imageNamed: icon_name];
   [img setName: [@"kick_" stringByAppendingString: icon_name]];
   [new_image setName: icon_name];
 } 
 
-static void setup_icons()
+void setup_icons()
 {
   GGPainter *painter = [GGPainter instance];
   [[painter stockIcon: GTK_STOCK_HOME] setName: @"common_Home"];
-  [[painter namedIcon: "gdu-mount"   withSize: 22] setName: @"common_Mount"];
-  [[painter namedIcon: "gdu-unmount" withSize: 22] setName: @"common_Unmount"];
+  // [[painter namedIcon: "gdu-mount"   withSize: 22] setName: @"common_Mount"];
+  // [[painter namedIcon: "gdu-unmount" withSize: 22] setName: @"common_Unmount"];
   [[painter stockIcon: GTK_STOCK_OK] setName: @"common_ret"];
   [[painter stockIcon: GTK_STOCK_CLOSE withSize: GTK_ICON_SIZE_MENU] setName: @"common_Close"];
   [[painter stockIcon: GTK_STOCK_CLOSE withSize: GTK_ICON_SIZE_MENU] setName: @"common_CloseH"];
@@ -350,11 +343,12 @@ static void setup_icons()
   [img unlockFocus];
 }
 
-static void setup_palette()
+NSColorList *setup_palette()
 {
   GtkStyle *windowstyle = [GGPainter getWidget: @"GtkWindow"]->style;
 
-  NSColorList *systemcolors = [NSColorList colorListNamed: @"System"];
+  NSColorList *systemcolors = [[NSColorList alloc] initWithName: @"System" 
+						   fromFile: nil];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->bg[GTK_STATE_NORMAL]] forKey: @"controlBackgroundColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->mid[GTK_STATE_NORMAL]] forKey: @"controlColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->bg[GTK_STATE_SELECTED]] forKey: @"selectedControlColor"];
@@ -371,20 +365,5 @@ static void setup_palette()
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->fg[GTK_STATE_NORMAL]] forKey: @"windowFrameColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->fg[GTK_STATE_INSENSITIVE]] forKey: @"windowFrameTextColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: [GGPainter getWidget: @"GtkHScrollbar"]->style->bg[GTK_STATE_NORMAL]] forKey: @"scrollBarColor"];
+  return systemcolors;
 }
-
-- (void) activate
-{
-  init_gtk_window();
-  init_gtk_widgets();
-  setup_palette();
-  setup_icons();
-
-  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-  [userDefaults setFloat: 0.0f forKey: @"GSScrollerButtonsOffset"];
-
-  NSLog (@"Gnome theme initialized");
-  [super activate];
-}
-
-@end

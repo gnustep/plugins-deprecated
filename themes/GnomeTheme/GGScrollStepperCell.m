@@ -1,8 +1,6 @@
 #include "GGScrollStepperCell.h"
 #include "GGPainter.h"
 
-
-
 @implementation GGScrollStepperCell
 - (BOOL) isHorizontal
 {
@@ -18,6 +16,7 @@
 {
   GGScrollStepperCell *cell = [[GGScrollStepperCell alloc] initTextCell: @""];
   [cell setHorizontal: is_horizontal];
+  return cell;
 }
 
 
@@ -26,22 +25,19 @@
                                     inView: (NSView*)controlView
 {
   GGPainter *painter = [GGPainter instance];
-
   GtkWidget *widget = [GGPainter getWidget: horizontal ? @"GtkHScrollbar" : @"GtkVScrollbar"];
-
-  GtkRange *range = GTK_RANGE(widget);
-
   NSImage *img;
+  // GtkRange *range = GTK_RANGE(widget);
 
-    img = [painter paintBox: widget
-                   withPart: horizontal ? "hscrollbar" : "vscrollbar"
-                    andSize: cellFrame
-                   withClip: NSZeroRect
+  img = [painter paintBox: widget
+		 withPart: horizontal ? "hscrollbar" : "vscrollbar"
+		 andSize: cellFrame
+		 withClip: NSZeroRect
                  usingState: _cell.is_highlighted ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL
-                     shadow: _cell.is_highlighted ? GTK_SHADOW_IN : GTK_SHADOW_OUT
-                      style: widget->style];
+		 shadow: _cell.is_highlighted ? GTK_SHADOW_IN : GTK_SHADOW_OUT
+		 style: widget->style];
 
 
-    [painter drawAndReleaseImage: img inFrame: cellFrame flipped: YES];
+  [painter drawAndReleaseImage: img inFrame: cellFrame flipped: YES];
 }
 @end

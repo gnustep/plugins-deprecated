@@ -18,7 +18,6 @@
   int               previousState = 0;
   NSRect            bounds = [view bounds];
   NSRect            aRect = [view bounds];
-  NSColor           *lineColour = [NSColor highlightColor];
   NSColor           *backgroundColour = [[view window] backgroundColor];
   BOOL              truncate = [(NSTabView *)view allowsTruncatedLabels];
   NSTabViewType     type = [(NSTabView *)view tabViewType];
@@ -26,6 +25,7 @@
   GGPainter *painter = [GGPainter instance];
   GtkWidget *widget = [GGPainter getWidget: @"GtkNotebook"];
   NSImage   *img = nil;
+  // NSColor           *lineColour = [NSColor highlightColor];
 
   // Make sure some tab is selected
   if (!selected && howMany > 0)

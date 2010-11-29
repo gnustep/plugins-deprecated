@@ -2,8 +2,8 @@
 #include "GGPainter.h"
 #include "GGScrollKnobCell.h"
 #include "GGScrollStepperCell.h"
+#include "GGnomeThemeInitialization.h"
 
-#include <gtk/gtk.h>
 #include <cairo/cairo.h>
 
 static NSImage *_pbc_image[5];
@@ -46,10 +46,9 @@ static NSImage *_pbc_image[5];
 
 - (void) drawFocusFrame: (NSRect) frame view: (NSView*) view
 {
-  NSRect vbounds = [view bounds];
-
   GGPainter *painter = [GGPainter instance];
   GtkWidget *button = [GGPainter getWidget: @"GtkButton"];
+  // NSRect vbounds = [view bounds];
 
   GTK_WIDGET_SET_FLAGS(button, GTK_HAS_DEFAULT);
   NSImage *img = [painter paintFocus: button
@@ -79,6 +78,7 @@ static NSImage *_pbc_image[5];
                              style: widget->style];
 
   [painter drawAndReleaseImage: img inFrame: r withClip: clip];
+  return r;
 }
 
 - (NSRect) drawProgressIndicatorBezel: (NSRect)bounds withClip: (NSRect) rect
@@ -129,6 +129,7 @@ static NSImage *_pbc_image[5];
                                shadow: GTK_SHADOW_IN
                                 style: widget->style];
   [painter drawAndReleaseImage: img inFrame: r withClip: clip];
+  return r;
 }
 
 - (NSRect) drawGroove: (NSRect)border withClip: (NSRect)clip
@@ -145,6 +146,7 @@ static NSImage *_pbc_image[5];
                                 style: widget->style];
 
   [painter drawAndReleaseImage: img inFrame: r withClip: clip];
+  return r;
 }
 
 - (void) drawBorderType: (NSBorderType)aType
@@ -414,6 +416,24 @@ static NSImage *_pbc_image[5];
   return [GGPainter fromGdkColor: style->bg[GTK_STATE_NORMAL]];
 }
 
+
+- (void) activate
+{
+  init_gtk_window();
+  init_gtk_widgets();
+  setup_icons();
+
+  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults setFloat: 0.0f forKey: @"GSScrollerButtonsOffset"];
+
+  NSLog (@"Gnome theme initialized");
+  [super activate];
+}
+
+- (NSColorList *) colors
+{
+  return setup_palette();
+}
 @end
 
 @implementation GGnomeTheme (Private)
@@ -472,7 +492,7 @@ static NSImage *_pbc_image[5];
 
   if (NSIntersectsRect(aRect, clipRect) == NO)
     {
-      return;
+      return aRect;
     }
 
   if ([well isBordered])

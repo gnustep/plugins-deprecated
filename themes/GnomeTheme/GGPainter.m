@@ -1,6 +1,6 @@
 #include "GGPainter.h"
 
-static BOOL usePixmapCache = YES;
+// static BOOL usePixmapCache = YES;
 
 extern BOOL hasRgbaColormap;
 
@@ -57,7 +57,7 @@ static inline GdkPixmap *init_pixmap_and_cairo_for_rect(GtkWidget *m_window, NSR
 {
   GdkPixmap *pixmap = gdk_pixmap_new(GDK_DRAWABLE(m_window->window), rect.size.width, rect.size.height, -1);
   if (!pixmap)
-    return;
+    return NULL;
   *style = gtk_style_attach (*style, m_window->window);
 
   *cr = gdk_cairo_create (pixmap);
@@ -106,7 +106,8 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
 {
   static GGPainter *theInstance = nil;
 
-  @synchronized(self) {
+  // @synchronized(self) 
+    {
     if (theInstance == nil) {
       theInstance = [[GGPainter alloc] init];
       [theInstance retain];
@@ -120,7 +121,8 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
 {
   static NSMutableDictionary *gtkWidgetMap = nil;
 
-  @synchronized(self) {
+  // @synchronized(self) 
+    {
     if (gtkWidgetMap == nil) {
       gtkWidgetMap = [NSMutableDictionary dictionaryWithCapacity: 20];
       [gtkWidgetMap retain];
@@ -181,23 +183,23 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
 
 - (NSImage *) namedIcon: (const gchar *) iconName withSize: (gint) size
 {
-    GtkStyle *style = [self gtkStyle];
-    GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
-    assert(icon_theme);
-    GdkPixbuf* icon = gtk_icon_theme_load_icon(icon_theme, iconName, size, 0, NULL);
-    NSImage *converted = nil;
-    if(icon)
-      {
-	//assert(icon);
-	converted = [self fromPixbuf: icon];
-	gdk_pixbuf_unref(icon);
-      }
-    else
-      {
-	NSLog(@"Failed to look up theme-based icon for iconName %s, using default.",iconName);
-      }
-
-    return converted;
+  // GtkStyle *style = [self gtkStyle];
+  GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+  assert(icon_theme);
+  GdkPixbuf* icon = gtk_icon_theme_load_icon(icon_theme, iconName, size, 0, NULL);
+  NSImage *converted = nil;
+  if(icon)
+    {
+      //assert(icon);
+      converted = [self fromPixbuf: icon];
+      gdk_pixbuf_unref(icon);
+    }
+  else
+    {
+      NSLog(@"Failed to look up theme-based icon for iconName %s, using default.",iconName);
+    }
+  
+  return converted;
 }
 
 - (void) drawAndReleaseImage: (NSImage *) image inFrame: (NSRect) cellFrame flipped: (BOOL) flipped
@@ -269,7 +271,7 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
 
 - (id) init
 {
-  if ( self = [super init] )
+  if ((self = [super init]))
     {
       m_alpha    = YES;
       m_window   = GTK_WIDGET([GGPainter getWidget: @"GtkWindow"]);
@@ -304,7 +306,7 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
 
 - (GtkStyle *) gtkStyle
 {
-  [self getWidgetStyle: [GGPainter getWidget: @"GtkWindow"]];
+  return [self getWidgetStyle: [GGPainter getWidget: @"GtkWindow"]];
 }
 
 - (NSString *) uniqueNameForPart: (NSString *) key
@@ -341,7 +343,7 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
 {
   PAINT_FUNCTION_BODY(
     GdkRectangle gdk_clip;
-    nsrect_to_gdkrect(&clip, &gdk_clip);
+    nsrect_to_gdkrect((NSRect *)&clip, &gdk_clip);
 
     gtk_paint_box (style,
                    pixmap,
@@ -367,7 +369,7 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
 {
 PAINT_FUNCTION_BODY(
                     GdkRectangle gdk_clip;
-                    nsrect_to_gdkrect(&clip, &gdk_clip);
+                    nsrect_to_gdkrect((NSRect *)&clip, &gdk_clip);
                     
                     gtk_paint_flat_box (style,
                                         pixmap,
@@ -393,7 +395,7 @@ PAINT_FUNCTION_BODY(
 {
   PAINT_FUNCTION_BODY(
     GdkRectangle gdk_clip;
-    nsrect_to_gdkrect(&clip, &gdk_clip);
+    nsrect_to_gdkrect((NSRect *)&clip, &gdk_clip);
 
     gtk_paint_extension (style,
                          pixmap,
@@ -401,7 +403,7 @@ PAINT_FUNCTION_BODY(
                          shadow,
                          NSEqualRects(clip, NSZeroRect) ? NULL : &gdk_clip,
                          gtkWidget,
-                         part,
+                         (gchar *)part,
                          0, 0,
                          rect.size.width,
                          rect.size.height,
@@ -505,10 +507,8 @@ PAINT_FUNCTION_BODY(
                        shadow: (GtkShadowType) shadow
 {
   GGPainter *painter = [GGPainter instance];
-
-  GtkStyle *gtk_style = [painter gtkStyle];
   GtkWidget *button = [GGPainter getWidget: @"GtkRadioButton"];
-
+  // GtkStyle *gtk_style = [painter gtkStyle];
 
   NSImage *img = [painter paintOption: button
                              withPart: "button"
@@ -544,9 +544,8 @@ PAINT_FUNCTION_BODY(
                        shadow: (GtkShadowType) shadow
 {
   GGPainter *painter = [GGPainter instance];
-
-  GtkStyle *gtk_style = [painter gtkStyle];
   GtkWidget *button = [GGPainter getWidget: @"GtkCheckButton"];
+  // GtkStyle *gtk_style = [painter gtkStyle];
 
 
   NSImage *img = [painter paintCheck: button
@@ -587,9 +586,8 @@ PAINT_FUNCTION_BODY(
                           shadow: (GtkShadowType) shadow
 {
   GGPainter *painter = [GGPainter instance];
-
-  GtkStyle *gtk_style = [painter gtkStyle];
   GtkWidget *widget = [GGPainter getWidget: @"GtkVScale"];
+  // GtkStyle *gtk_style = [painter gtkStyle];
 
 
   NSImage *img = [painter paintSlider: widget
