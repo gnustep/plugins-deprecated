@@ -4,7 +4,7 @@
 #include "GGPainter.h"
 
 @implementation GGnomeTheme (NSMenuView)
-
+/*
 - (void) drawMenuRect: (NSRect)rect
 	       inView: (NSView *)view
 	 isHorizontal: (BOOL)horizontal
@@ -42,6 +42,6 @@
 
   [painter drawAndReleaseImage: img inFrame: bounds flipped: NO];
 }
-
+*/
 @end
 

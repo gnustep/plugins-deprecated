@@ -37,7 +37,6 @@
 
 - (void) drawTableCornerView: (NSView *)view withClip: (NSRect)aRect
 {
-  /*
   NSRect cellFrame = aRect;
 
   GGPainter *painter = [GGPainter instance];
@@ -55,6 +54,5 @@
                              style: widget->style];
 
   [painter drawAndReleaseImage: img inFrame: cellFrame flipped: YES];
-  */
 }
 @end

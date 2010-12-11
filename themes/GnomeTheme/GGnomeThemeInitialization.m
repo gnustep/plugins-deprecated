@@ -352,18 +352,27 @@ NSColorList *setup_palette()
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->bg[GTK_STATE_NORMAL]] forKey: @"controlBackgroundColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->mid[GTK_STATE_NORMAL]] forKey: @"controlColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->bg[GTK_STATE_SELECTED]] forKey: @"selectedControlColor"];
-  //[systemcolors setColor: [NSColor redColor] forKey: @"controlColor"];
-  //[systemcolors setColor: [NSColor greenColor] forKey: @"controlBackgroundColor"];
-  // [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->text[GTK_STATE_SELECTED]] forKey: @"selectedControlTextColor"];
-  // [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->fg[GTK_STATE_PRELIGHT]] forKey: @"controlHighlightColor"];
-  // [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->light[GTK_STATE_PRELIGHT]] forKey: @"controlLightHighlightColor"];
-  // [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->mid[GTK_STATE_NORMAL]] forKey: @"controlShadowColor"];
-  // [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->dark[GTK_STATE_NORMAL]] forKey: @"controlDarkShadowColor"];
-  // [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->text[GTK_STATE_NORMAL]] forKey: @"controlTextColor"];
+  //*
+  // [systemcolors setColor: [NSColor redColor] forKey: @"controlColor"];
+  // [systemcolors setColor: [NSColor greenColor] forKey: @"controlBackgroundColor"];
+  [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->text[GTK_STATE_SELECTED]] forKey: @"selectedControlTextColor"];
+  [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->fg[GTK_STATE_PRELIGHT]] forKey: @"controlHighlightColor"];
+  [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->light[GTK_STATE_PRELIGHT]] forKey: @"controlLightHighlightColor"];
+  [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->mid[GTK_STATE_NORMAL]] forKey: @"controlShadowColor"];
+  [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->dark[GTK_STATE_NORMAL]] forKey: @"controlDarkShadowColor"];
+  [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->text[GTK_STATE_NORMAL]] forKey: @"controlTextColor"];
+  //*/
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->text[GTK_STATE_INSENSITIVE]] forKey: @"disabledControlTextColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->bg[GTK_STATE_NORMAL]] forKey: @"windowBackgroundColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->fg[GTK_STATE_NORMAL]] forKey: @"windowFrameColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: windowstyle->fg[GTK_STATE_INSENSITIVE]] forKey: @"windowFrameTextColor"];
   [systemcolors setColor: [GGPainter fromGdkColor: [GGPainter getWidget: @"GtkHScrollbar"]->style->bg[GTK_STATE_NORMAL]] forKey: @"scrollBarColor"];
+
+  // Fill in the rest of them...
+  [systemcolors setColor: [NSColor whiteColor]
+		forKey: @"textBackgroundColor"];
+  [systemcolors setColor: [NSColor blackColor]
+		forKey: @"textColor"];
+
   return systemcolors;
 }

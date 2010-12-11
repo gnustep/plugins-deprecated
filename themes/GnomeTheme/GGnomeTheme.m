@@ -94,7 +94,7 @@ static NSImage *_pbc_image[5];
                              shadow: GTK_SHADOW_IN
                               style: widget->style];
 
-   [painter drawAndReleaseImage: img inFrame: bounds flipped: YES];
+   [painter drawAndReleaseImage: img inFrame: bounds flipped: NO];
    return bounds;
 }
 
@@ -174,7 +174,7 @@ static NSImage *_pbc_image[5];
                           shadow: GTK_SHADOW_IN
                            style: entry->style];
 
-      [painter drawAndReleaseImage: img inFrame: frame flipped: YES];
+      [painter drawAndReleaseImage: img inFrame: frame flipped: NO];
     case NSNoBorder:
     default:
       break;

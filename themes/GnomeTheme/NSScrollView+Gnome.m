@@ -4,7 +4,6 @@
 #include "GGnomeTheme.h"
 
 @implementation GGnomeTheme (NSScrollView)
-
 - (void) drawScrollViewRect: (NSRect)rect
 		     inView: (NSView *)view 
 {

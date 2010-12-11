@@ -6,7 +6,7 @@ extern BOOL hasRgbaColormap;
 
 void gdkrect_to_nsrect (GdkRectangle* gdkrect, NSRect* nsrect)
 {
-  nsrect->origin.x = gdkrect->x;
+  nsrect->origin.x = gdkrect->x; // - nsrect->size.height;
   nsrect->origin.y = gdkrect->y;
   nsrect->size.width = gdkrect->width;
   nsrect->size.height = gdkrect->height;
@@ -14,7 +14,7 @@ void gdkrect_to_nsrect (GdkRectangle* gdkrect, NSRect* nsrect)
 
 void nsrect_to_gdkrect (NSRect* nsrect, GdkRectangle* gdkrect)
 {
-  gdkrect->x      = nsrect->origin.x;
+  gdkrect->x      = nsrect->origin.x + gdkrect->height;
   gdkrect->y      = nsrect->origin.y;
   gdkrect->width  = nsrect->size.width;
   gdkrect->height = nsrect->size.height;

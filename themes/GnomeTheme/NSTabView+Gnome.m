@@ -5,7 +5,6 @@
 #include "GGnomeTheme.h"
 
 @implementation GGnomeTheme (NSTabView)
-
 // Drawing.
 - (void) drawTabViewRect: (NSRect)rect
 		  inView: (NSView *)view
@@ -46,7 +45,7 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
         break;
 
       case NSBottomTabsBezelBorder: 
