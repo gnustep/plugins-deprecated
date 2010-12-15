@@ -28,7 +28,7 @@
                                 shadow: GTK_SHADOW_NONE
                                  style: widget->style];
 
-  [painter drawAndReleaseImage: img inFrame: clipRect flipped: YES];
+  [painter drawAndReleaseImage: img inFrame: clipRect flipped: NO];
 } 
 
 - (void) drawTableViewGridInClipRect: (NSRect)aRect

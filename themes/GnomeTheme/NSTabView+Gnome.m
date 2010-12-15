@@ -45,7 +45,7 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
         break;
 
       case NSBottomTabsBezelBorder: 
@@ -59,7 +59,7 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
         aRect.origin.y -= 16;
         break;
 
@@ -74,7 +74,7 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
         break;
 
       case NSRightTabsBezelBorder: 
@@ -87,7 +87,7 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
         break;
 
       case NSNoTabsBezelBorder: 
@@ -99,7 +99,7 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
         break;
 
       case NSNoTabsLineBorder: 
