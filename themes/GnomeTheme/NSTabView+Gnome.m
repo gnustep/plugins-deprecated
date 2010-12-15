@@ -45,7 +45,7 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
         break;
 
       case NSBottomTabsBezelBorder: 

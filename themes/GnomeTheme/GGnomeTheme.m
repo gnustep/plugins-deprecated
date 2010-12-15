@@ -174,7 +174,7 @@ static NSImage *_pbc_image[5];
                           shadow: GTK_SHADOW_IN
                            style: entry->style];
 
-      [painter drawAndReleaseImage: img inFrame: frame flipped: NO];
+      [painter drawAndReleaseImage: img inFrame: frame flipped: YES];
     case NSNoBorder:
     default:
       break;

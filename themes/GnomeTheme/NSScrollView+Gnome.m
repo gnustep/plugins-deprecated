@@ -37,7 +37,7 @@
         break;
 
       case NSBezelBorder:
-        [theme drawGrayBezel: bounds withClip: rect];
+	[theme drawGrayBezel: bounds withClip: rect];
         break;
 
       case NSGrooveBorder:

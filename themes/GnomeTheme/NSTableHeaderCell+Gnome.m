@@ -43,7 +43,7 @@
 
   GtkWidget *widget = [GGPainter getWidget: @"GtkTreeView.GtkButton"];
 
-  GtkStateType state = GTK_STATE_NORMAL;
+  // GtkStateType state = GTK_STATE_NORMAL;
 
   NSImage *img = [painter paintBox: widget
                           withPart: "button"

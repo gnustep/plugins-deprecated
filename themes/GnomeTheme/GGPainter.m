@@ -202,7 +202,9 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
   return converted;
 }
 
-- (void) drawAndReleaseImage: (NSImage *) image inFrame: (NSRect) cellFrame flipped: (BOOL) flipped
+- (void) drawAndReleaseImage: (NSImage *) image 
+		     inFrame: (NSRect) cellFrame 
+		     flipped: (BOOL) flipped
 {
   if (flipped) {
     [NSGraphicsContext saveGraphicsState];
@@ -211,7 +213,11 @@ static inline NSImage *create_ns_image_from_pixmap(BOOL m_alpha, NSRect rect, Gd
     // by scaling Y negatively, we effectively flip the image:
     [t scaleXBy:1.0 yBy:-1.0];
     [t concat];
-    [image drawInRect: NSMakeRect(cellFrame.origin.x, -cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height)
+    [image drawInRect: NSMakeRect(cellFrame.origin.x, 
+				  -( cellFrame.origin.y + 
+				     cellFrame.size.height ), 
+				  cellFrame.size.width, 
+				  cellFrame.size.height)
              fromRect: NSMakeRect(0, 0, cellFrame.size.width, cellFrame.size.height)
             operation: NSCompositeSourceOver
              fraction: 1.0];
