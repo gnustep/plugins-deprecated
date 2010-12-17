@@ -4,7 +4,7 @@
 #include "GGPainter.h"
 
 @implementation GGnomeTheme (NSMenuView)
-/*
+
 - (void) drawMenuRect: (NSRect)rect
 	       inView: (NSView *)view
 	 isHorizontal: (BOOL)horizontal
@@ -14,20 +14,6 @@
   int         howMany = [itemCells count];
   NSMenuView *menuView = (NSMenuView *)view;
   NSRect      bounds = [view bounds];
-
-  // Draw the menu cells.
-  for (i = 0; i < howMany; i++)
-    {
-      NSRect aRect;
-      NSMenuItemCell *aCell;
-
-      aRect = [menuView rectOfItemAtIndex: i];
-      if (NSIntersectsRect(rect, aRect) == YES)
-        {
-          aCell = [menuView menuItemCellForItemAtIndex: i];
-          [aCell drawWithFrame: aRect inView: menuView];
-        }
-    }
 
   GGPainter *painter = [GGPainter instance];
   GtkWidget *widget = [GGPainter getWidget: @"GtkMenu"];
@@ -41,7 +27,26 @@
                              style: widget->style];
 
   [painter drawAndReleaseImage: img inFrame: bounds flipped: NO];
+
+  // Draw the menu cells.
+  for (i = 0; i < howMany; i++)
+    {
+      NSRect aRect;
+      NSMenuItemCell *aCell;
+
+      aRect = [menuView rectOfItemAtIndex: i];
+
+      aRect.origin.y += 2;
+      aRect.size.width -= 2;
+      aRect.size.height -= 2;
+
+      if (NSIntersectsRect(rect, aRect) == YES)
+        {
+          aCell = [menuView menuItemCellForItemAtIndex: i];
+          [aCell drawWithFrame: aRect inView: menuView];
+        }
+    }
 }
-*/
+
 @end
 

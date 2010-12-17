@@ -53,7 +53,6 @@
 
    [painter drawAndReleaseImage: img inFrame: cellFrame flipped: YES];
   } else {
-    /*
     img = [painter paintBox: widget
                    withPart: "trough"
                     andSize: cellFrame
@@ -63,7 +62,6 @@
                       style: widget->style];
 
    [painter drawAndReleaseImage: img inFrame: cellFrame flipped: YES];
-    */
   }
 }
 
