@@ -8,4 +8,8 @@
   GSThemeDetails = "Gtk+ native theme";
   GSThemeIcon = gtk+.png;     
   GSThemePreview = gtk+.png;
+  GSThemeDomain = {
+  	NSScrollViewInterfaceStyle = NSWindows95InterfaceStyle;
+  	NSScrollerInterfaceStyle = NSWindows95InterfaceStyle;
+  };
 }

@@ -38,7 +38,7 @@
 
       aRect.origin.y += 2;
       aRect.size.width -= 2;
-      aRect.size.height -= 2;
+      // aRect.size.height -= 2;
 
       if (NSIntersectsRect(rect, aRect) == YES)
         {
