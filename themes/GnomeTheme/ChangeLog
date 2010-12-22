@@ -1,3 +1,7 @@
+2010-12-22 17:41-EST Gregory John Casamento <greg.casamento@gmail.com>
+
+	* GnomeThemeInfo.plist: Supress the app icon in this mode.
+
 2010-11-27 Gregory Casamento <greg.casamento@gmail.com>
 
 	* Changed all previously modified files to be
