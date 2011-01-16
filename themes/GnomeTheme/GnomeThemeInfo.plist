@@ -11,6 +11,7 @@
   GSThemeDomain = {
   	NSScrollViewInterfaceStyle = NSWindows95InterfaceStyle;
   	NSScrollerInterfaceStyle = NSWindows95InterfaceStyle;
+	NSMenuInterfaceStyle = NSWindows95InterfaceStyle;
 	GSSuppressAppIcon = YES;
   };
 }

@@ -1,3 +1,7 @@
+2011-01-16 03:20-EST Gregory John Casamento <greg.casamento@gmail.com>
+
+	* GnomeThemeInfo.plist: Added setting to use in-window menus.
+
 2010-12-22 17:41-EST Gregory John Casamento <greg.casamento@gmail.com>
 
 	* GnomeThemeInfo.plist: Supress the app icon in this mode.
