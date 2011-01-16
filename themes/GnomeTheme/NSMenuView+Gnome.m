@@ -25,7 +25,6 @@
                         usingState: GTK_STATE_NORMAL
                             shadow: GTK_SHADOW_OUT
                              style: widget->style];
-
   [painter drawAndReleaseImage: img inFrame: bounds flipped: NO];
 
   // Draw the menu cells.
@@ -35,10 +34,11 @@
       NSMenuItemCell *aCell;
 
       aRect = [menuView rectOfItemAtIndex: i];
-
-      aRect.origin.y += 2;
-      aRect.size.width -= 2;
-      // aRect.size.height -= 2;
+      aRect.size.width -= 1;
+      if(!horizontal && i == howMany - 1)
+	{
+	  aRect.origin.y += 2;
+	}
 
       if (NSIntersectsRect(rect, aRect) == YES)
         {

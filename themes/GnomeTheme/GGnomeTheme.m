@@ -382,6 +382,7 @@ static NSImage *_pbc_image[5];
 
   if (state == GSThemeHighlightedState)
     {
+      // cellFrame.size.height -= 2;
       GtkWidget *widget = [GGPainter getWidget: @"GtkMenu.GtkMenuItem"];
 
       GtkShadowType selected_shadow_type;
@@ -389,8 +390,6 @@ static NSImage *_pbc_image[5];
                             "selected-shadow-type", &selected_shadow_type,
                             NULL);
 
-      cellFrame = NSInsetRect(cellFrame, 2, 1);
-      cellFrame.origin.x -= 1;
       NSImage *img = [painter paintBox: widget
                               withPart: "menuitem"
                                andSize: cellFrame
