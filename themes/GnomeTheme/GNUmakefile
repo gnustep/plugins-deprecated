@@ -17,7 +17,7 @@ VERSION = 1
 
 GnomeTheme_PRINCIPAL_CLASS = GGnomeTheme
 GnomeTheme_INSTALL_DIR=$(GNUSTEP_LIBRARY)/Themes
-GnomeTheme_RESOURCE_FILES=Resources/gtk+.png
+GnomeTheme_RESOURCE_FILES=Resources/gnome_icon_48.png
 #
 # Class files
 #
