@@ -1,3 +1,11 @@
+ifeq ($(GNUSTEP_MAKEFILES),)
+ GNUSTEP_MAKEFILES := $(shell gnustep-config --variable=GNUSTEP_MAKEFILES 2>/dev/null)
+endif
+ifeq ($(GNUSTEP_MAKEFILES),)
+ $(error You need to set GNUSTEP_MAKEFILES before compiling!)
+endif
+
+
 include $(GNUSTEP_MAKEFILES)/common.make
 
 MYCFLAGS = -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -D_REENTRANT -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/gconf/2/

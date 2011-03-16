@@ -243,14 +243,14 @@ void setup_icons()
   [[painter stockIcon: GTK_STOCK_CLOSE withSize: GTK_ICON_SIZE_MENU] setName: @"common_Close"];
   [[painter stockIcon: GTK_STOCK_CLOSE withSize: GTK_ICON_SIZE_MENU] setName: @"common_CloseH"];
 
-  [[painter stockIcon: GTK_STOCK_DIRECTORY withSize: GTK_ICON_SIZE_DIALOG] setName: @"common_Folder"];
-  [[painter stockIcon: GTK_STOCK_HOME withSize: GTK_ICON_SIZE_DIALOG] setName: @"common_HomeDirectory"];
+  [[painter namedIcon: "folder" withSize: 48] setName: @"common_Folder"];
+  [[painter namedIcon: "folder_home" withSize: 48] setName: @"common_HomeDirectory"];
 
   // radio button theme images
   NSImage *img = [NSImage imageNamed: @"NSHighlightedRadioButton"];
   [[painter drawRadioButton: [img size] state: GTK_STATE_NORMAL shadow: GTK_SHADOW_IN] setName: @"common_RadioOn"];
   [[painter drawRadioButton: [img size] state: GTK_STATE_NORMAL shadow: GTK_SHADOW_OUT] setName: @"common_RadioOff"];
-  [[painter namedIcon: "empty" withSize: 48] setName: @"common_Unknown"];
+  [[painter namedIcon: "unknown" withSize: 48] setName: @"common_Unknown"];
   [[painter namedIcon: "exec" withSize: 48] setName: @"common_UnknownTool"];
   [[painter namedIcon: "computer" withSize: 48] setName: @"common_Root_PC"];
 
