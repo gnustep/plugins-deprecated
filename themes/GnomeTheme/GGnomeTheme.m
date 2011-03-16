@@ -422,8 +422,8 @@ static NSImage *_pbc_image[5];
   init_gtk_widgets();
   setup_icons();
 
-  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-  [userDefaults setFloat: 0.0f forKey: @"GSScrollerButtonsOffset"];
+  // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+  // [userDefaults setFloat: 0.0f forKey: @"GSScrollerButtonsOffset"];
 
   NSLog (@"Gnome theme initialized");
   [super activate];
