@@ -129,70 +129,75 @@
       labelYCorrection = -2.0;
     }
 
-  for (i = 0; i < howMany; i++) 
+  if ((type != NSNoTabsBezelBorder) &&
+      (type != NSNoTabsLineBorder) &&
+      (type != NSNoTabsNoBorder))
     {
-      NSRect r;
-      NSRect fRect;
-      NSTabViewItem *anItem = [items objectAtIndex: i];
-      NSTabState itemState = [anItem tabState];
-      NSSize s = [anItem sizeOfLabel: truncate];
+      for (i = 0; i < howMany; i++) 
+	{
+	  NSRect r;
+	  NSRect fRect;
+	  NSTabViewItem *anItem = [items objectAtIndex: i];
+	  NSTabState itemState = [anItem tabState];
+	  NSSize s = [anItem sizeOfLabel: truncate];
+	  
+	  r.origin.x = iP.x;
+	  r.origin.y = iP.y;
+	  r.size.width = s.width + 16;
+	  r.size.height = 15;
 
-      r.origin.x = iP.x;
-      r.origin.y = iP.y;
-      r.size.width = s.width + 16;
-      r.size.height = 15;
-
-      fRect = r;
-
-      if (itemState == NSSelectedTab)
-        {
-          // Undraw the line that separates the tab from its view.
-          if (type == NSBottomTabsBezelBorder)
-            fRect.origin.y += 1;
-          else if (type == NSTopTabsBezelBorder)
-            fRect.origin.y -= 1;
-
-          fRect.size.height += 1;
-        }
-      [backgroundColour set];
-      NSRectFill(fRect);
-
-      if (itemState == NSSelectedTab) 
-        {
-          img = [painter paintExtension: widget
-                               withPart: "tab"
-                                andSize: r
-                               withClip: NSZeroRect
-                             usingState: GTK_STATE_NORMAL
-                                 shadow: GTK_SHADOW_OUT
-                               position: position
-                                  style: widget->style];
-          iP.x += r.size.width;
-        }
-      else if (itemState == NSBackgroundTab)
-        {
-          img = [painter paintExtension: widget
-                               withPart: "tab"
-                                andSize: r
-                               withClip: NSZeroRect
-                             usingState: GTK_STATE_ACTIVE
-                                 shadow: GTK_SHADOW_OUT
-                               position: position
-                                  style: widget->style];
-          iP.x += r.size.width - 4;
-        } 
-      else
-        NSLog(@"Not finished yet. Luff ya.\n");
-      
-      if (itemState == NSSelectedTab && i == howMany -1)
-        r.size.width += 4;
-
-      [painter drawAndReleaseImage: img inFrame: r flipped: NO];
+	  fRect = r;
+	  
+	  if (itemState == NSSelectedTab)
+	    {
+	      // Undraw the line that separates the tab from its view.
+	      if (type == NSBottomTabsBezelBorder)
+		fRect.origin.y += 1;
+	      else if (type == NSTopTabsBezelBorder)
+		fRect.origin.y -= 1;
+	      
+	      fRect.size.height += 1;
+	    }
+	  [backgroundColour set];
+	  NSRectFill(fRect);
+	  
+	  if (itemState == NSSelectedTab) 
+	    {
+	      img = [painter paintExtension: widget
+                                   withPart: "tab"
+                                    andSize: r
+                                   withClip: NSZeroRect
+                                 usingState: GTK_STATE_NORMAL
+                                     shadow: GTK_SHADOW_OUT
+                                   position: position
+                                      style: widget->style];
+	      iP.x += r.size.width;
+	    }
+	  else if (itemState == NSBackgroundTab)
+	    {
+	      img = [painter paintExtension: widget
+                                   withPart: "tab"
+                                    andSize: r
+                                   withClip: NSZeroRect
+                                 usingState: GTK_STATE_ACTIVE
+                                     shadow: GTK_SHADOW_OUT
+                                   position: position
+                                      style: widget->style];
+	      iP.x += r.size.width - 4;
+	    } 
+	  else
+	    NSLog(@"Not finished yet. Luff ya.\n");
+	  
+	  if (itemState == NSSelectedTab && i == howMany -1)
+	    r.size.width += 4;
+	  
+	  [painter drawAndReleaseImage: img inFrame: r flipped: NO];
           
-      // Label
-      [anItem drawLabel: truncate inRect: NSMakeRect(r.origin.x + (r.size.width - s.width)/2, r.origin.y + labelYCorrection, s.width, s.height)];
+	  // Label
+	  [anItem drawLabel: truncate inRect: NSMakeRect(r.origin.x + (r.size.width - s.width)/2, r.origin.y + labelYCorrection, s.width, s.height)];
           
-      previousState = itemState;
+	  previousState = itemState;
+	}
     }
   // FIXME: Missing drawing code for other cases
 

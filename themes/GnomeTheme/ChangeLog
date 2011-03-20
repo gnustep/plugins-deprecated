@@ -1,3 +1,8 @@
+2011-03-20 German Arias <german@xelalug.org>
+
+	* NSTabView+Gnome.m: No draw tabs if the style doesn't
+	have these.
+
 2011-03-16 11:05-EDT Ivan Vucica <ivucica@gmail.com>
 
 	* GGnomeThemeInitialization.m: Better choice of some FS icons.
