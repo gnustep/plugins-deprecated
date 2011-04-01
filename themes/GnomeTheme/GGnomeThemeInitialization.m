@@ -336,11 +336,13 @@ void setup_icons()
   img = [NSImage imageNamed: icon_name];
   replace_icon(icon_name, [painter drawTreeViewExpander: [img size] withExpanderStyle: GTK_EXPANDER_EXPANDED]);
 
+  /*
   img = [NSImage imageNamed: @"common_outlineUnexpandable"];
   [img lockFocus];
   [[NSColor colorWithCalibratedWhite: 1.0 alpha: 0.0] set];
   NSRectFill(NSMakeRect(0, 0, [img size].width, [img size].height));
   [img unlockFocus];
+  */
 }
 
 NSColorList *setup_palette()
