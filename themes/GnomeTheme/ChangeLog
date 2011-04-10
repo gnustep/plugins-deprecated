@@ -1,3 +1,8 @@
+2011-04-10 16:45-EST Gregory John Casamento <greg.casamento@gmail.com>
+
+	* GGnomeTheme.m: Correct drawing issue with horizontal portion of
+	menu.
+	
 2011-03-20 German Arias <german@xelalug.org>
 
 	* NSTabView+Gnome.m: No draw tabs if the style doesn't

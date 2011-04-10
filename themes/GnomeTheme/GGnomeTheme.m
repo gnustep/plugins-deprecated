@@ -370,10 +370,12 @@ static NSImage *_pbc_image[5];
 
   if (isHorizontal)
     {
+      NSRect newFrame = cellFrame;
+      newFrame.size.height -= 2;
       cellFrame = [cell drawingRectForBounds: cellFrame];
-      [[cell backgroundColor] set];
-      NSRectFill(cellFrame);
-      return;
+      // [[cell backgroundColor] set];
+      // NSRectFill(cellFrame);
+      // return;
     }
 
   // Set cell's background color
@@ -432,6 +434,11 @@ static NSImage *_pbc_image[5];
 - (NSColorList *) colors
 {
   return setup_palette();
+}
+
+- (BOOL) menuShouldShowIcon
+{
+  return NO;
 }
 @end
 
