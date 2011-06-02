@@ -62,6 +62,7 @@ static NSImage *_pbc_image[5];
   GTK_WIDGET_UNSET_FLAGS(button, GTK_HAS_DEFAULT);
 }
 
+/*
 - (NSRect) drawGrayBezel: (NSRect)border withClip: (NSRect)clip
 {
   NSRect r;
@@ -80,7 +81,9 @@ static NSImage *_pbc_image[5];
   [painter drawAndReleaseImage: img inFrame: r withClip: clip];
   return r;
 }
+*/
 
+ /*
 - (NSRect) drawProgressIndicatorBezel: (NSRect)bounds withClip: (NSRect) rect
 {
    GGPainter *painter =  [GGPainter instance];
@@ -97,6 +100,7 @@ static NSImage *_pbc_image[5];
    [painter drawAndReleaseImage: img inFrame: bounds flipped: NO];
    return bounds;
 }
+ */
 
 - (void) drawProgressIndicatorBarDeterminate: (NSRect)bounds;
 {

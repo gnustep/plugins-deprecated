@@ -29,18 +29,22 @@
   switch (borderType)
     {
       case NSNoBorder:
+	NSLog(@"No border");
         break;
 
       case NSLineBorder:
+	NSLog(@"Line");
         [color set];
         NSFrameRect(bounds);
         break;
 
       case NSBezelBorder:
+	NSLog(@"Bezel");
 	[theme drawGrayBezel: bounds withClip: rect];
         break;
 
       case NSGrooveBorder:
+	NSLog(@"Groove");
         [theme drawGroove: bounds withClip: rect];
         break;
     }

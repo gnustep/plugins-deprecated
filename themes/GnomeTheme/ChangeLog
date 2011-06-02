@@ -1,3 +1,10 @@
+2011-06-02 18:08-EDT Gregory John Casamento <greg.casamento@gmail.com>
+
+	* GGnomeTheme.[hm]: Remove method to draw grayBezel
+	* NSScrollView+Gnome.m: Add debugging information here for now.
+	* NSTabView+Gnome.m: Various fixesa and corrections.  Correction for
+	tab view issue.  For now use the button method to draw the border.
+
 2011-04-10 16:45-EST Gregory John Casamento <greg.casamento@gmail.com>
 
 	* GGnomeTheme.m: Correct drawing issue with horizontal portion of
