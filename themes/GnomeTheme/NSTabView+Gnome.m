@@ -201,7 +201,7 @@
 	      iP.x += r.size.width - 4;
 	    } 
 	  else
-	    NSLog(@"Not finished yet. Luff ya.\n");
+	    NSLog(@"Unhandled case.\n");
 	  
 	  if (itemState == NSSelectedTab && i == howMany -1)
 	    r.size.width += 4;
