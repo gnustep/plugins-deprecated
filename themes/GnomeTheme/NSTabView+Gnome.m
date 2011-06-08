@@ -37,7 +37,6 @@
       default:
       case NSTopTabsBezelBorder: 
         aRect.size.height -= 16;
-	/*
         img = [painter paintBox: widget
                        withPart: "notebook"
                         andSize: aRect
@@ -46,15 +45,13 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
-	*/
-	[self drawButton: aRect withClip: rect];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+	// [self drawButton: aRect withClip: rect];
         break;
 
       case NSBottomTabsBezelBorder: 
         aRect.size.height -= 16;
         aRect.origin.y += 16;
-	/*
         img = [painter paintBox: widget
                        withPart: "notebook"
                         andSize: aRect
@@ -63,16 +60,14 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
-	*/
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
         aRect.origin.y -= 16;
-	[self drawButton: aRect withClip: rect];
+	// [self drawButton: aRect withClip: rect];
         break;
 
       case NSLeftTabsBezelBorder: 
         aRect.size.width -= 18;
         aRect.origin.x += 18;
-	/*
         img = [painter paintBox: widget
                        withPart: "notebook"
                         andSize: aRect
@@ -81,15 +76,13 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
-	*/
-	[self drawButton: aRect withClip: rect];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+	// [self drawButton: aRect withClip: rect];
         break;
 
       case NSRightTabsBezelBorder: 
         aRect.size.width -= 18;
-	/*
-        img = [painter paintBox: widget
+	img = [painter paintBox: widget
                        withPart: "notebook"
                         andSize: aRect
                        withClip: rect
@@ -97,13 +90,11 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
-	*/
-	[self drawButton: aRect withClip: rect];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+	// [self drawButton: aRect withClip: rect];
         break;
 
       case NSNoTabsBezelBorder: 
-	/*
         img = [painter paintBox: widget
                        withPart: "notebook"
                         andSize: aRect
@@ -112,9 +103,8 @@
                          shadow: GTK_SHADOW_OUT
                           style: widget->style];
 
-        [painter drawAndReleaseImage: img inFrame: aRect flipped: YES];
-	*/
-	[self drawButton: aRect withClip: rect];
+        [painter drawAndReleaseImage: img inFrame: aRect flipped: NO];
+	// [self drawButton: aRect withClip: rect];
         break;
 
       case NSNoTabsLineBorder: 

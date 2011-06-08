@@ -1,3 +1,7 @@
+2011-06-08 15:25-EDT Gregory John Casamento <greg.casamento@gmail.com>
+
+	* NSTabView+Gnome.m: Correct notebook widget drawing.
+
 2011-06-03 01:11-EDT Gregory John Casamento <greg.casamento@gmail.com>
 
 	* NSBrowser+Gnome.m: Draw border.
