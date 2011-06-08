@@ -378,3 +378,7 @@ NSColorList *setup_palette()
 
   return systemcolors;
 }
+
+void setup_fonts()
+{
+}

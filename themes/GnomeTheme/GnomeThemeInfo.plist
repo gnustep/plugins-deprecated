@@ -13,5 +13,6 @@
   	NSScrollerInterfaceStyle = NSWindows95InterfaceStyle;
 	NSMenuInterfaceStyle = NSWindows95InterfaceStyle;
 	GSSuppressAppIcon = YES;
+	GSScrollerButtonsOffset = 0.0;
   };
 }

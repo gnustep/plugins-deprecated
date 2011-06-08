@@ -45,3 +45,4 @@ NSSize scale_size(NSSize orig, gfloat factor);
 void replace_icon(NSString *icon_name, NSImage *new_image);
 void setup_icons();
 NSColorList *setup_palette();
+void setup_fonts();

@@ -62,45 +62,29 @@ static NSImage *_pbc_image[5];
   GTK_WIDGET_UNSET_FLAGS(button, GTK_HAS_DEFAULT);
 }
 
-/*
+
 - (NSRect) drawGrayBezel: (NSRect)border withClip: (NSRect)clip
-{
-  NSRect r;
-  GGPainter *painter =  [GGPainter instance];
-  GtkWidget *widget = [GGPainter getWidget: @"GtkProgressBar"];
-  r = border;
-
-  NSImage *img = [painter paintBox: widget
-                          withPart: "trough"
-                           andSize: r
-                          withClip: NSZeroRect
-                        usingState: GTK_STATE_NORMAL
-                            shadow: GTK_SHADOW_IN
-                             style: widget->style];
-
-  [painter drawAndReleaseImage: img inFrame: r withClip: clip];
-  return r;
+{  
+  /*
+  GtkWidget *entry   = [GGPainter getWidget: @"GtkEntry"];
+  GGPainter *painter = [GGPainter instance];
+  NSImage *img = [painter paintShadow: entry
+			     withPart: "entry"
+			      andSize: border
+			   usingState: GTK_STATE_NORMAL
+			       shadow: GTK_SHADOW_IN
+				style: entry->style];
+  
+  [painter drawAndReleaseImage: img inFrame: border flipped: YES];
+  return border;
+  */
+  return [self drawDarkBezel: border withClip: clip];
 }
-*/
 
- /*
 - (NSRect) drawProgressIndicatorBezel: (NSRect)bounds withClip: (NSRect) rect
 {
-   GGPainter *painter =  [GGPainter instance];
-   GtkWidget *widget = [GGPainter getWidget: @"GtkProgressBar"];
-
-   NSImage *img = [painter paintBox: widget
-                           withPart: "trough"
-                            andSize: bounds
-                           withClip: NSZeroRect
-                         usingState: GTK_STATE_NORMAL
-                             shadow: GTK_SHADOW_IN
-                              style: widget->style];
-
-   [painter drawAndReleaseImage: img inFrame: bounds flipped: NO];
-   return bounds;
+  return [self drawDarkBezel: bounds withClip: rect];
 }
- */
 
 - (void) drawProgressIndicatorBarDeterminate: (NSRect)bounds;
 {
@@ -118,10 +102,11 @@ static NSImage *_pbc_image[5];
   [painter drawAndReleaseImage: img inFrame: bounds flipped: YES];
 }
 
-/** Draw a dark bezel border */
-- (NSRect) drawDarkBezel: (NSRect)border withClip: (NSRect)clip
-{
 
+
+/** Draw a dark bezel border */
+- (NSRect) drawDarkBezel: (NSRect)border withClip: (NSRect)clip isFlipped: (BOOL)flag
+{
   NSRect r = border;
   GGPainter *painter =  [GGPainter instance];
   GtkWidget *widget = [GGPainter getWidget: @"GtkFrame"];
@@ -132,8 +117,16 @@ static NSImage *_pbc_image[5];
                            usingState: GTK_STATE_NORMAL
                                shadow: GTK_SHADOW_IN
                                 style: widget->style];
-  [painter drawAndReleaseImage: img inFrame: r withClip: clip];
+  // [painter drawAndReleaseImage: img inFrame: r withClip: clip];
+  [painter drawAndReleaseImage: img inFrame: r flipped: flag];
   return r;
+}
+
+- (NSRect) drawDarkBezel: (NSRect)border withClip: (NSRect)clip
+{
+  return [self drawDarkBezel: border 
+		    withClip: clip
+		   isFlipped: YES];
 }
 
 - (NSRect) drawGroove: (NSRect)border withClip: (NSRect)clip
@@ -150,6 +143,7 @@ static NSImage *_pbc_image[5];
                                 style: widget->style];
 
   [painter drawAndReleaseImage: img inFrame: r withClip: clip];
+  // [painter drawAndReleaseImage: img inFrame: r flipped: YES];
   return r;
 }
 
@@ -427,9 +421,7 @@ static NSImage *_pbc_image[5];
   init_gtk_window();
   init_gtk_widgets();
   setup_icons();
-
-  // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-  // [userDefaults setFloat: 0.0f forKey: @"GSScrollerButtonsOffset"];
+  setup_fonts();
 
   NSLog (@"Gnome theme initialized");
   [super activate];

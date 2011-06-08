@@ -70,7 +70,7 @@
           [NSBezierPath strokeLineFromPoint: p1 toPoint: p2];
         }
     }
-  [[GSTheme theme] drawGrayBezel: rect withClip: bounds];
+  [(GGnomeTheme *)[GSTheme theme] drawDarkBezel: bounds withClip: rect isFlipped: NO];
 }
 
 @end

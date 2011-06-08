@@ -17,8 +17,9 @@
 
 - (void) drawFocusFrame: (NSRect) frame view: (NSView*) view;
 
+- (NSRect) drawDarkBezel: (NSRect)border withClip: (NSRect)clip isFlipped: (BOOL)flag;
 - (NSRect) drawDarkBezel: (NSRect)border withClip: (NSRect)clip;
-//- (NSRect) drawGrayBezel: (NSRect)border withClip: (NSRect)clip;
+- (NSRect) drawGrayBezel: (NSRect)border withClip: (NSRect)clip;
 - (NSRect) drawGroove: (NSRect)border withClip: (NSRect)clip;
 
 - (void) drawBorderType: (NSBorderType)aType
