@@ -426,7 +426,13 @@ void setup_fonts()
   NSString *defaultFontNameAndSize = getDefaultFontName();
   NSString *monoFontNameAndSize = getMonospaceFontName();
   NSFont *defaultFont = fontFromNameAndSize(defaultFontNameAndSize);
-  [NSFont setUserFont: defaultFont];
+  if(defaultFont != nil)
+    {
+      [NSFont setUserFont: defaultFont];
+    }
   NSFont *fixedFont = fontFromNameAndSize(monoFontNameAndSize);
-  [NSFont setUserFixedPitchFont:fixedFont];
+  if(fixedFont != nil)
+    {
+      [NSFont setUserFixedPitchFont:fixedFont];
+    }
 }
