@@ -54,6 +54,16 @@ NSString *getThemeName()
   return getGConfString(@"/desktop/gnome/interface/gtk_theme");
 }
 
+NSString *getDefaultFontName()
+{
+  return getGConfString(@"/desktop/gnome/interface/font_name");
+}
+
+NSString *getMonospaceFontName()
+{
+  return getGConfString(@"/desktop/gnome/interface/monospace_font_name");
+}
+
 typedef int (*x11ErrorHandler)(Display*, XErrorEvent*);
 
 void init_gtk_window()
@@ -379,6 +389,44 @@ NSColorList *setup_palette()
   return systemcolors;
 }
 
+NSFont *fontFromNameAndSize(NSString *nameAndSize)
+{
+  NSString *fontName = nil;
+  NSString *fontSize = nil;
+  NSScanner *scanner = [NSScanner scannerWithString: nameAndSize];
+  [scanner scanUpToCharactersFromSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]
+			  intoString: &fontName];
+  [scanner scanCharactersFromSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]
+		      intoString: NULL];
+  [scanner scanUpToCharactersFromSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]
+			  intoString: &fontSize];
+  float fSize = [fontSize floatValue] + 3; // not sure why this is needed.  GS seems to be rendering fonts smaller than GNOME.
+  NSFont *font = [NSFont fontWithName: fontName
+				 size: fSize];
+  
+  if(font == nil)
+    {
+      if([fontName isEqualToString: @"Sans"])
+	{
+	  font = [NSFont fontWithName: @"Liberation Sans"
+				 size: fSize];
+	}
+      if([fontName isEqualToString: @"Monospace"])
+	{
+	  font = [NSFont fontWithName: @"Liberation Mono"
+				 size: fSize];
+	}
+    }
+
+  return font;
+}
+
 void setup_fonts()
 {
+  NSString *defaultFontNameAndSize = getDefaultFontName();
+  NSString *monoFontNameAndSize = getMonospaceFontName();
+  NSFont *defaultFont = fontFromNameAndSize(defaultFontNameAndSize);
+  [NSFont setUserFont: defaultFont];
+  NSFont *fixedFont = fontFromNameAndSize(monoFontNameAndSize);
+  [NSFont setUserFixedPitchFont:fixedFont];
 }

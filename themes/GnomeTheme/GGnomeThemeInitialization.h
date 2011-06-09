@@ -32,6 +32,9 @@
 
 NSString *getGConfString(NSString *value);
 NSString *getThemeName();
+NSString *getDefaultFontName();
+NSString *getMonospaceFontName();
+
 void init_gtk_window();
 void setup_gtk_widget(GtkWidget* widget);
 void add_widget(GtkWidget *widget);;

@@ -1,3 +1,12 @@
+2011-06-09 14:04-EDT Gregory John Casamento <greg.casamento@gmail.com>
+
+	* GGnomeThemeInitialization.h: Added declarations for functions
+	to get the font	based on the default from GNOME.
+	* GGnomeThemeInitialization.m: Call functions to get the font
+	from the GNOME config.  If it is not one which is available to
+	GNUstep pick "Liberation Sans" or "Liberation Mono" if those
+	are unavailable do not change.
+
 2011-06-09 11:08-EDT Gregory John Casamento <greg.casamento@gmail.com>
 
 	* NSTabView+Gnome.m: Move the tabs over a little when drawing them
