@@ -1,3 +1,8 @@
+2011-06-09 11:08-EDT Gregory John Casamento <greg.casamento@gmail.com>
+
+	* NSTabView+Gnome.m: Move the tabs over a little when drawing them
+	so that the align better with the notebook widget underneath.
+
 2011-06-08 15:25-EDT Gregory John Casamento <greg.casamento@gmail.com>
 
 	* NSTabView+Gnome.m: Correct notebook widget drawing.

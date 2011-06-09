@@ -146,7 +146,7 @@
 	  NSTabState itemState = [anItem tabState];
 	  NSSize s = [anItem sizeOfLabel: truncate];
 	  
-	  r.origin.x = iP.x;
+	  r.origin.x = iP.x + 3; // move it over slightly to align better.
 	  r.origin.y = iP.y;
 	  r.size.width = s.width + 16;
 	  r.size.height = 15;
