@@ -18,20 +18,20 @@ ADDITIONAL_LDFLAGS = -v -L/usr/lib/debug/usr/lib/ -lgtk-x11-2.0 -lgdk-x11-2.0 -l
 #
 # Main
 #
-PACKAGE_NAME = GnomeTheme
-BUNDLE_NAME = GnomeTheme
+PACKAGE_NAME = GtkTheme
+BUNDLE_NAME = GtkTheme
 BUNDLE_EXTENSION = .theme
 VERSION = 1
 
-GnomeTheme_PRINCIPAL_CLASS = GGnomeTheme
-GnomeTheme_INSTALL_DIR=$(GNUSTEP_LIBRARY)/Themes
-GnomeTheme_RESOURCE_FILES=Resources/gnome_icon_48.png \
+GtkTheme_PRINCIPAL_CLASS = GGnomeTheme
+GtkTheme_INSTALL_DIR=$(GNUSTEP_LIBRARY)/Themes
+GtkTheme_RESOURCE_FILES=Resources/gnome_icon_48.png \
 Resources/ThemeImages/*
 
 #
 # Class files
 #
-GnomeTheme_OBJC_FILES = \
+GtkTheme_OBJC_FILES = \
 		GSBrowserTitleCell+Gnome.m \
 		NSPopUpButtonCell+Gnome.m \
 		NSMenuView+Gnome.m \

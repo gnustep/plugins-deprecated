@@ -1,11 +1,11 @@
 {
-  NSExecutable = "GnomeTheme";
+  NSExecutable = "GtkTheme";
   NSPrincipalClass = "GGnomeTheme";
   GSThemeAuthors = (
 	"Hans Baier",
 	"Gregory John Casamento",
   );
-  GSThemeDetails = "Gnome theme";
+  GSThemeDetails = "Gtk theme";
   GSThemeIcon = gnome_icon_48.png;     
   GSThemePreview = gtk+.png;
   GSThemeDomain = {
